@@ -1,0 +1,26 @@
+{
+    "name": "annotatecms/packages",
+    "type": "annotatecms-extension",
+    "description": "Package management extension for AnnotateCms framework",
+    "minimum-stability": "dev",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michal Vyšinský",
+            "email": "vysinsky@live.com"
+        }
+    ],
+    "require" : {
+        "nette/nette" : "@dev",
+        "kdyby/events": "@dev",
+        "annotatecms/installer": "@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "AnnotateCms\\Packages\\": "src/"
+        }
+    },
+    "extra": {
+        "extension-class" : "AnnotateCms\\Framework\\DI\\PackagesExtension"
+    }
+}
