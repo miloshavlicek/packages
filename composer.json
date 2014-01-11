@@ -21,6 +21,6 @@
         }
     },
     "extra": {
-        "extension-class" : "AnnotateCms\\Framework\\DI\\PackagesExtension"
+        "extension-class" : "AnnotateCms\\Packages\\DI\\PackagesExtension"
     }
 }
