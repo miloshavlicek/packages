@@ -9,7 +9,7 @@
 namespace AnnotateCms\Packages\DI;
 
 
-use AnnotateCms\Packages\PackageLoader;
+use AnnotateCms\Packages\Loaders\PackageLoader;
 use Nette\DI\CompilerExtension;
 
 class PackagesExtension extends CompilerExtension

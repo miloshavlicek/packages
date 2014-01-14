@@ -6,11 +6,12 @@
  * Time: 19:38
  */
 
-namespace AnnotateCms\Packages;
+namespace AnnotateCms\Packages\Loaders;
 
 use AnnotateCms\Packages\Exceptions\BadPackageVersionException;
 use AnnotateCms\Packages\Exceptions\PackageNotFoundException;
 use AnnotateCms\Packages\Exceptions\PackageVariantNotFoundException;
+use AnnotateCms\Packages\Package;
 use Nette\ArrayHash;
 use Nette\DI\Config\Adapters\NeonAdapter;
 use Nette\Utils\Finder;
