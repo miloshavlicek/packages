@@ -38,7 +38,7 @@ class Package
 
     public function isChecked()
     {
-        return $this->isChecked();
+        return $this->checked;
     }
 
     public function getName()
@@ -61,9 +61,9 @@ class Package
         return $this->dependencies;
     }
 
-    public function getRDir()
+    public function getRelativePath()
     {
-        return $this->rDir;
+        return str_replace("\\", "/", $this->rDir) . "/";
     }
 
     public function setLoaded()
