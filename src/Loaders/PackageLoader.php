@@ -13,7 +13,6 @@ use AnnotateCms\Packages\Asset;
 use AnnotateCms\Packages\Exceptions\BadPackageVersionException;
 use AnnotateCms\Packages\Exceptions\PackageNotFoundException;
 use AnnotateCms\Packages\Exceptions\PackageVariantNotFoundException;
-use AnnotateCms\Packages\Header;
 use AnnotateCms\Packages\Package;
 use AnnotateCms\Themes\Theme;
 use Kdyby\Events\Subscriber;
@@ -228,7 +227,7 @@ class PackageLoader implements Subscriber
             $html .= "<div><table>";
             $html .= "<thead><tr><th>Name</th><th>Version</th><th>Variant</th><th>Deps</th></tr></thead>";
             foreach ($packages as $package) {
-                $html .= "<tr><td>" . $package["name"] . "</td><td>" . $package["version"] . "</td><td>" . $package["variant"] . "</td><td>".Dumper::toHtml($package["dependencies"], array(Dumper::COLLAPSE => true))."</td></tr>";
+                $html .= "<tr><td>" . $package["name"] . "</td><td>" . $package["version"] . "</td><td>" . $package["variant"] . "</td><td>" . Dumper::toHtml($package["dependencies"], array(Dumper::COLLAPSE => true)) . "</td></tr>";
             }
             $html .= "</table></div>";
             return $html;
