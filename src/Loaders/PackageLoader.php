@@ -21,7 +21,7 @@ use Nette\Diagnostics\Dumper;
 use Nette\Utils\Finder;
 
 if (!defined("PACKAGES_DIR")) {
-    define("PACKAGES_DIR", APP_DIR . "packages" . DS);
+    define("PACKAGES_DIR", APP_DIR . DS . "addons" . DS . "packages" . DS);
 }
 
 class PackageLoader implements Subscriber
