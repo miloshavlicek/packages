@@ -59,6 +59,8 @@ class PackageLoader implements Subscriber
             $this->packages[$neon["name"]] = new Package($neon["name"], $neon["version"], $neon["variants"], $dependencies, $aDir, $rDir);
         }
 
+        $this->addDebugSection();
+
     }
 
     private function mergeVariants(&$neon)
@@ -189,8 +191,6 @@ class PackageLoader implements Subscriber
             }
         }
         $theme->setChecked();
-
-        $this->addDebugSection();
     }
 
     /**
@@ -221,8 +221,9 @@ class PackageLoader implements Subscriber
 
     private function addDebugSection()
     {
-        $packages = $this->loadedPackages;
-        CmsPanel::$sections[] = function () use ($packages) {
+        $self = $this;
+        CmsPanel::$sections[] = function () use ($self) {
+            $packages = $self->loadedPackages;
             $html = "<h2>Loaded Packages:</h2>";
             $html .= "<div><table>";
             $html .= "<thead><tr><th>Name</th><th>Version</th><th>Variant</th><th>Deps</th></tr></thead>";
