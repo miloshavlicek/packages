@@ -9,23 +9,25 @@
 namespace AnnotateCms\Packages;
 
 
-class Asset
+class Asset implements IAsset
 {
 
-    /** @var  Package */
-    private $package;
-    private $fileName;
+	/** @var  Package */
+	private $package;
+	private $fileName;
 
-    function __construct(Package $package, $fileName)
-    {
-        $this->package = $package;
-        $this->fileName = $fileName;
-    }
 
-    public function getRelativePath($basePath)
-    {
-        return str_replace("@", $basePath . $this->package->getRelativePath(), $this->fileName);
-    }
+	function __construct(Package $package, $fileName)
+	{
+		$this->package = $package;
+		$this->fileName = $fileName;
+	}
+
+
+	public function getRelativePath($basePath)
+	{
+		return str_replace("@", $basePath . $this->package->getRelativePath(), $this->fileName);
+	}
 
 
 } 
