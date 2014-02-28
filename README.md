@@ -11,7 +11,7 @@ Note: this works when annotatecms/sandbox is installed
 
 Run:
 
-  composer require annotatecms/packages:@dev
+    composer require annotatecms/packages:@dev
   
 Hint!
 -----
