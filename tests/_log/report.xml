@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="unit" tests="5" assertions="11" failures="0" errors="1" time="0.103377">
+    <testcase name="testAddPackageAppendsPackages" class="AssetsLoaderTest" file="/home/michal/www/cms/vendor/annotatecms/packages/tests/unit/AssetsLoaderTest.php" line="19" assertions="3" time="0.017317"/>
+    <testcase name="testAddStylesMergeAddedWithExistingArray" class="AssetsLoaderTest" file="/home/michal/www/cms/vendor/annotatecms/packages/tests/unit/AssetsLoaderTest.php" line="28" assertions="3" time="0.008793"/>
+    <testcase name="testAddScriptsMergeAddedWithExistingArray" class="AssetsLoaderTest" file="/home/michal/www/cms/vendor/annotatecms/packages/tests/unit/AssetsLoaderTest.php" line="43" assertions="3" time="0.009160"/>
+    <testcase name="testItListensGoodEvents" class="AssetsLoaderTest" file="/home/michal/www/cms/vendor/annotatecms/packages/tests/unit/AssetsLoaderTest.php" line="58" assertions="0" time="0.038791">
+      <error type="ErrorException">test it listens good events
+ErrorException: Use of undefined constant APP_DIR - assumed 'APP_DIR'
+
+/home/michal/www/cms/vendor/annotatecms/themes/src/Loaders/ThemesLoader.php:24
+phar:///usr/local/bin/cept/vendor/composer/ClassLoader.php:269
+/home/michal/www/cms/vendor/annotatecms/packages/src/Loaders/AssetsLoader.php:59
+/home/michal/www/cms/vendor/annotatecms/packages/tests/unit/AssetsLoaderTest.php:60
+/usr/local/bin/cept:7
+</error>
+    </testcase>
+    <testcase name="testFunctional" class="ExtensionTest" file="/home/michal/www/cms/vendor/annotatecms/packages/tests/unit/ExtensionTest.php" line="19" assertions="2" time="0.029316"/>
+  </testsuite>
+</testsuites>
