@@ -5,7 +5,7 @@ php:
   - 5.5
 
 before_script:
-  composer install --prefer-source
-  wget http://codeception.com/codecept.phar .
+  - composer install --prefer-source
+  - wget http://codeception.com/codecept.phar .
 
 script: php codecept.phar run
