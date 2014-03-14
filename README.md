@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/annotatecms/packages.png?branch=master)](https://travis-ci.org/annotatecms/packages)
+
 Packages package for AnnotateCms
 ================================
 

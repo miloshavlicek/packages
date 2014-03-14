@@ -6,6 +6,6 @@ php:
 
 before_script:
   - composer install --prefer-source
-  - wget http://codeception.com/codecept.phar .
+  - wget -O codecept.phar http://codeception.com/codecept.phar
 
-script: php codecept.phar run
+script: 'php codecept.phar run'
