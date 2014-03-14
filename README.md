@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/annotatecms/packages.png?branch=master)](https://travis-ci.org/annotatecms/packages)
-
-Packages package for AnnotateCms
+Packages package for AnnotateCms [![Build Status](https://secure.travis-ci.org/annotatecms/packages.png?branch=master)](http://travis-ci.org/annotatecms/packages)
 ================================
 
 This package provides powerfull packages support. You can create package (for js/css library) and require it with theme or component
