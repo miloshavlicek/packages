@@ -16,12 +16,16 @@
         "annotatecms/installer": "@dev",
         "annotatecms/framework": "@dev"
     },
+    "suggest": {
+        "annotatecms/themes": "Reveal full power of packages with themes package"
+    },
     "autoload": {
         "psr-4": {
             "AnnotateCms\\Packages\\": "src/"
         }
     },
     "extra": {
+        "config-dir": "app/config/",
         "extension-name": "packages",
         "extension-class": "AnnotateCms\\Packages\\DI\\PackagesExtension"
     }

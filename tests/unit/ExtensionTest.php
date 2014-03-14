@@ -16,7 +16,7 @@ class ExtensionTest extends \Codeception\TestCase\Test
         return $config->createContainer();
     }
 
-    public function testFunctional()
+    public function testExtensionAddsServices()
     {
         $dic = $this->createContainer();
         $this->assertTrue($dic->getService('packages.packageLoader') instanceof \AnnotateCms\Packages\Loaders\PackageLoader);

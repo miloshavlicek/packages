@@ -1,4 +1,0 @@
-extensions:
-	events: Kdyby\Events\DI\EventsExtension
-	framework: AnnotateCms\Framework\DI\FrameworkExtension
-	
