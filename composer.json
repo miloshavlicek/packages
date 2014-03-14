@@ -22,7 +22,6 @@
         }
     },
     "extra": {
-        "config-dir": "app/config/",
         "extension-name": "packages",
         "extension-class": "AnnotateCms\\Packages\\DI\\PackagesExtension"
     }
