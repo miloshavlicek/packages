@@ -33,6 +33,11 @@ class AssetsTest extends \Codeception\TestCase\Test
 
     public function testThemeAssetReturnsCorrectPath()
     {
+        if (!class_exists('AnnotateCms\\Themes\\Theme')) {
+            $this->markTestSkipped('Test skipped because themes extension is not installed');
+            return;
+        }
+
         $def = [
             'name' => 'TestTheme',
             'version' => 1.0,
