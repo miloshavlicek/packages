@@ -13,7 +13,7 @@ use AnnotateCms\Packages\Package;
 use AnnotateCms\Packages\ThemeAsset;
 use AnnotateCms\Themes\Theme;
 use Kdyby\Events\Subscriber;
-use Nette\Templating\ITemplate;
+use Nette\Bridges\ApplicationLatte\Template;
 
 class AssetsLoader implements Subscriber
 {
@@ -27,10 +27,12 @@ class AssetsLoader implements Subscriber
     /** @var Package[] */
     private $packages = [];
 
+
     public function getPackages()
     {
         return $this->packages;
     }
+
 
     public function addPackage(Package $package)
     {
@@ -89,7 +91,7 @@ class AssetsLoader implements Subscriber
     }
 
 
-    public function onSetupTemplate(ITemplate $template)
+    public function onSetupTemplate(Template $template)
     {
         $template->styles = $this->styles;
         $template->scripts = $this->scripts;
