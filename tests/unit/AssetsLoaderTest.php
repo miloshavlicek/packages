@@ -101,7 +101,7 @@ class AssetsLoaderTest extends \Codeception\TestCase\Test
 
     public function testItAddsTemplateVariablesOnSetupTemplate()
     {
-        $template = new \Nette\Templating\Template();
+        $template = new \Nette\Bridges\ApplicationLatte\Template(new \Latte\Engine());
         $this->assetsLoader->onSetupTemplate($template);
         $this->assertEquals([], $template->styles);
         $this->assertEquals([], $template->scripts);
