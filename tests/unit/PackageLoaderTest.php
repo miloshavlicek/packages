@@ -15,7 +15,7 @@ class PackageLoaderTest extends \Codeception\TestCase\Test
     protected function _before()
     {
         $assetsLoader = $this->getMock('AnnotateCms\\Packages\\Loaders\\AssetsLoader');
-        $this->packageLoader = new \AnnotateCms\Packages\Loaders\PackageLoader($assetsLoader);
+        $this->packageLoader = new \AnnotateCms\Packages\Loaders\PackageLoader(DATA_DIR . '/packages', $assetsLoader);
     }
 
     public function testItListensGoodEvents()
@@ -60,7 +60,7 @@ class PackageLoaderTest extends \Codeception\TestCase\Test
         $assetsLoader->expects($this->once()) // jQuery has not any styles
             ->method('addStyles');
 
-        $this->packageLoader = new \AnnotateCms\Packages\Loaders\PackageLoader($assetsLoader);
+        $this->packageLoader = new \AnnotateCms\Packages\Loaders\PackageLoader(DATA_DIR . '/packages', $assetsLoader);
 
         $def = [
             'name' => 'TestTheme',
@@ -174,7 +174,7 @@ class PackageLoaderTest extends \Codeception\TestCase\Test
         $assetsLoader->expects($this->exactly(0)) // jQuery has not any styles
             ->method('addStyles');
 
-        $this->packageLoader = new \AnnotateCms\Packages\Loaders\PackageLoader($assetsLoader);
+        $this->packageLoader = new \AnnotateCms\Packages\Loaders\PackageLoader(DATA_DIR . '/packages', $assetsLoader);
 
         $this->packageLoader->loadPackage('jQuery');
     }
@@ -245,7 +245,7 @@ class PackageLoaderTest extends \Codeception\TestCase\Test
     public function testItSkipsLoadedPackage()
     {
         $assetsLoader = $this->getMock('AnnotateCms\\Packages\\Loaders\\AssetsLoader');
-        $this->packageLoader = new \AnnotateCms\Packages\Loaders\PackageLoader($assetsLoader);
+        $this->packageLoader = new \AnnotateCms\Packages\Loaders\PackageLoader(DATA_DIR . '/packages', $assetsLoader);
         $this->packageLoader->loadPackage('jQuery');
 
         $assetsLoader->expects($this->exactly(0))

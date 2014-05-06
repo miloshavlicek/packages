@@ -20,10 +20,6 @@ use Nette\DI\Config\Adapters\NeonAdapter;
 use Nette\Utils\Finder;
 use Tracy\Dumper;
 
-if (!defined("PACKAGES_DIR")) {
-    define("PACKAGES_DIR", APP_DIR . "addons" . DS . "packages" . DS);
-}
-
 class PackageLoader implements Subscriber
 {
 
@@ -31,6 +27,7 @@ class PackageLoader implements Subscriber
 
     /** @var Package[] */
     private $packages = [];
+
     /**
      * @var AssetsLoader
      */
@@ -38,11 +35,15 @@ class PackageLoader implements Subscriber
 
     private $loadedPackages = [];
 
+    /** @var string */
+    private $packagesDir;
 
-    function __construct(AssetsLoader $assetsLoader)
+
+    function __construct($packagesDir, AssetsLoader $assetsLoader)
     {
-        $this->load();
+        $this->packagesDir = $packagesDir;
         $this->assetsLoader = $assetsLoader;
+        $this->load();
     }
 
 
@@ -51,7 +52,7 @@ class PackageLoader implements Subscriber
 
         $adapter = new NeonAdapter();
 
-        foreach (Finder::findFiles("*.package.neon")->from(PACKAGES_DIR) as $path => $file) {
+        foreach (Finder::findFiles("*.package.neon")->from($this->packagesDir) as $path => $file) {
             /** @var $file \SplFileInfo */
             $neon = $adapter->load($path);
             $this->mergeVariants($neon);

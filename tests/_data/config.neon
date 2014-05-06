@@ -1,2 +1,5 @@
 extensions:
     packages: AnnotateCms\Packages\DI\PackagesExtension
+
+packages:
+    directory: %appDir%/../_data/packages

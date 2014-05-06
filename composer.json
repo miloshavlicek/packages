@@ -16,7 +16,8 @@
         "annotatecms/framework": "@dev"
     },
     "require-dev": {
-        "codeception/codeception": "@dev"
+        "codeception/codeception": "@dev",
+        "annotatecms/themes": "@dev"
     },
     "suggest": {
         "annotatecms/themes": "Reveal full power of packages with themes package"
