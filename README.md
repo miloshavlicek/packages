@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/annotatecms/packages.svg)](https://travis-ci.org/annotatecms/packages)
+
 Packages package for AnnotateCms
 ================================
 
