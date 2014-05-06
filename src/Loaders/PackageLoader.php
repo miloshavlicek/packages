@@ -17,8 +17,8 @@ use AnnotateCms\Packages\Package;
 use AnnotateCms\Themes\Theme;
 use Kdyby\Events\Subscriber;
 use Nette\DI\Config\Adapters\NeonAdapter;
-use Nette\Diagnostics\Dumper;
 use Nette\Utils\Finder;
+use Tracy\Dumper;
 
 if (!defined("PACKAGES_DIR")) {
     define("PACKAGES_DIR", APP_DIR . "addons" . DS . "packages" . DS);
@@ -203,7 +203,7 @@ class PackageLoader implements Subscriber
 
     /**
      * @param        $name
-     * @param null $version
+     * @param null   $version
      * @param string $variant
      *
      * @throws BadPackageVersionException
@@ -259,6 +259,7 @@ class PackageLoader implements Subscriber
             $this->assetsLoader->addStyles($styles);
         }
     }
+
 
     /**
      * @return \AnnotateCms\Packages\Package[]
