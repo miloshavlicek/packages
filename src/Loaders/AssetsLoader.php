@@ -55,7 +55,7 @@ class AssetsLoader implements Subscriber
     public function getSubscribedEvents()
     {
         return [
-            "AnnotateCms\\Framework\\Templating\\TemplateFactory::onSetupTemplate",
+            "AnnotateCms\\Templating\\TemplateFactory::onSetupTemplate",
             "AnnotateCms\\Themes\\Loaders\\ThemesLoader::onActivateTheme",
         ];
     }

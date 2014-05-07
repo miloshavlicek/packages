@@ -63,7 +63,7 @@ class AssetsLoaderTest extends \Codeception\TestCase\Test
     public function testItListensGoodEvents()
     {
         $this->assertEquals([
-            'AnnotateCms\\Framework\\Templating\\TemplateFactory::onSetupTemplate',
+                'AnnotateCms\\Templating\\TemplateFactory::onSetupTemplate',
             'AnnotateCms\\Themes\\Loaders\\ThemesLoader::onActivateTheme',
         ], $this->assetsLoader->getSubscribedEvents());
     }
