@@ -13,7 +13,8 @@
     "require": {
         "php": ">=5.4",
         "annotatecms/extensions-installer": "@dev",
-        "annotatecms/framework": "@dev"
+        "annotatecms/diagnostics": "@dev",
+        "annotatecms/events": "@dev"
     },
     "require-dev": {
         "codeception/codeception": "@dev",

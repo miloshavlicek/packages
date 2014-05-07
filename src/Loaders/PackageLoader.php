@@ -8,7 +8,7 @@
 
 namespace AnnotateCms\Packages\Loaders;
 
-use AnnotateCms\Framework\Diagnostics\CmsPanel;
+use AnnotateCms\Diagnostics\CmsPanel;
 use AnnotateCms\Packages\Asset;
 use AnnotateCms\Packages\Exceptions\BadPackageVersionException;
 use AnnotateCms\Packages\Exceptions\PackageNotFoundException;
