@@ -4,4 +4,3 @@ variants:
     default:
         scripts:
             - @jquery.min.js
-    fake < default:

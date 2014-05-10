@@ -1205,10 +1205,10 @@ if (typeof jQuery === 'undefined') {
                 var parentLeft = this.options.container == 'body' ? 0 : $parent.offset().left
 
                 placement = placement == 'bottom' && pos.top + pos.height + actualHeight - docScroll > parentHeight ? 'top' :
-                        placement == 'top' && pos.top - docScroll - actualHeight < 0 ? 'bottom' :
+                    placement == 'top' && pos.top - docScroll - actualHeight < 0 ? 'bottom' :
                         placement == 'right' && pos.right + actualWidth > parentWidth ? 'left' :
-                        placement == 'left' && pos.left - actualWidth < parentLeft ? 'right' :
-                    placement
+                            placement == 'left' && pos.left - actualWidth < parentLeft ? 'right' :
+                                placement
 
                 $tip
                     .removeClass(orgPlacement)
@@ -1352,9 +1352,9 @@ if (typeof jQuery === 'undefined') {
 
     Tooltip.prototype.getCalculatedOffset = function (placement, pos, actualWidth, actualHeight) {
         return placement == 'bottom' ? { top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2  } :
-                placement == 'top' ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2  } :
+            placement == 'top' ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2  } :
                 placement == 'left' ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
-            /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width   }
+                    /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width   }
     }
 
     Tooltip.prototype.getTitle = function () {
@@ -1363,7 +1363,7 @@ if (typeof jQuery === 'undefined') {
         var o = this.options
 
         title = $e.attr('data-original-title')
-            || (typeof o.title == 'function' ? o.title.call($e[0]) : o.title)
+        || (typeof o.title == 'function' ? o.title.call($e[0]) : o.title)
 
         return title
     }
@@ -1503,9 +1503,9 @@ if (typeof jQuery === 'undefined') {
         var o = this.options
 
         return $e.attr('data-content')
-            || (typeof o.content == 'function' ?
-                o.content.call($e[0]) :
-                o.content)
+        || (typeof o.content == 'function' ?
+            o.content.call($e[0]) :
+            o.content)
     }
 
     Popover.prototype.arrow = function () {
@@ -1572,8 +1572,8 @@ if (typeof jQuery === 'undefined') {
         this.$scrollElement = this.$element.on('scroll.bs.scroll-spy.data-api', process)
         this.options = $.extend({}, ScrollSpy.DEFAULTS, options)
         this.selector = (this.options.target
-            || ((href = $(element).attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) //strip for ie7
-            || '') + ' .nav li > a'
+        || ((href = $(element).attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) //strip for ie7
+        || '') + ' .nav li > a'
         this.offsets = $([])
         this.targets = $([])
         this.activeTarget = null
@@ -1601,11 +1601,11 @@ if (typeof jQuery === 'undefined') {
                 var $href = /^#./.test(href) && $(href)
 
                 return ($href
-                    && $href.length
-                    && $href.is(':visible')
-                    && [
-                        [ $href[offsetMethod]().top + (!$.isWindow(self.$scrollElement.get(0)) && self.$scrollElement.scrollTop()), href ]
-                    ]) || null
+                && $href.length
+                && $href.is(':visible')
+                && [
+                    [ $href[offsetMethod]().top + (!$.isWindow(self.$scrollElement.get(0)) && self.$scrollElement.scrollTop()), href ]
+                ]) || null
             })
             .sort(function (a, b) {
                 return a[0] - b[0]
@@ -1896,7 +1896,7 @@ if (typeof jQuery === 'undefined') {
         if (typeof offsetBottom == 'function') offsetBottom = offset.bottom(this.$element)
 
         var affix = this.unpin != null && (scrollTop + this.unpin <= position.top) ? false :
-                offsetBottom != null && (position.top + this.$element.height() >= scrollHeight - offsetBottom) ? 'bottom' :
+            offsetBottom != null && (position.top + this.$element.height() >= scrollHeight - offsetBottom) ? 'bottom' :
                 offsetTop != null && (scrollTop <= offsetTop) ? 'top' : false
 
         if (this.affixed === affix) return

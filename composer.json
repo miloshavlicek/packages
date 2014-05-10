@@ -17,7 +17,8 @@
         "annotatecms/events": "@dev"
     },
     "require-dev": {
-        "codeception/codeception": "@dev",
+        "nette/tester": "@dev",
+        "janmarek/mockista": "@dev",
         "annotatecms/themes": "@dev"
     },
     "suggest": {
