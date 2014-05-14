@@ -185,6 +185,7 @@ class PackageLoaderTest extends TestCase
         $assetsLoader->expects('addScripts')->exactly(0);
         $assetsLoader->expects('addStyles')->exactly(0);
         $this->createPackageLoader($assetsLoader)->onActivateTheme($theme);
+        $assetsLoader->assertExpectations();
     }
 
 
@@ -209,21 +210,22 @@ class PackageLoaderTest extends TestCase
         $assetsLoader->expects('addScripts')->exactly(0);
         $assetsLoader->expects('addStyles')->exactly(0);
         $this->createPackageLoader($assetsLoader)->onActivateTheme($theme);
+        $assetsLoader->assertExpectations();
     }
 
 
     public function testItSkipsLoadedPackage()
     {
-        return; // Currently investigating why this test fails
         $assetsLoader = $this->createAssetLoaderMock();
         $packageLoader = $this->createPackageLoader($assetsLoader);
 
-        $packageLoader->loadPackage('jQuery');
 
-        $assetsLoader->expects('addScripts')->exactly(0);
+        $assetsLoader->expects('addScripts')->exactly(1);
         $assetsLoader->expects('addStyles')->exactly(0);
 
         $packageLoader->loadPackage('jQuery');
+        $packageLoader->loadPackage('jQuery');
+        $assetsLoader->assertExpectations();
     }
 
 
