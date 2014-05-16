@@ -2,7 +2,6 @@
     "name": "annotatecms/packages",
     "type": "annotatecms-extension",
     "description": "Package management extension for AnnotateCms framework",
-    "minimum-stability": "dev",
     "license": "MIT",
     "authors": [
         {
