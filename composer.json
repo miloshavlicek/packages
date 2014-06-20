@@ -11,9 +11,9 @@
     ],
     "require": {
         "php": ">=5.4",
-        "annotatecms/extensions-installer": "@alpha",
-        "annotatecms/diagnostics": "@alpha",
-        "annotatecms/events": "@alpha"
+        "annotatecms/extensions-installer": "@dev",
+        "annotatecms/diagnostics": "@dev",
+        "annotatecms/events": "@dev"
     },
     "require-dev": {
         "nette/tester": "@dev",
