@@ -18,7 +18,7 @@ use Nette\Bridges\ApplicationLatte\Template;
 class AssetsLoader implements Subscriber
 {
 
-    const classname = __CLASS__;
+    const CLASSNAME = __CLASS__;
 
     private $styles = [];
 
@@ -97,4 +97,4 @@ class AssetsLoader implements Subscriber
         $template->scripts = $this->scripts;
     }
 
-} 
+}

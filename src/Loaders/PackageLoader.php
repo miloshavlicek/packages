@@ -23,7 +23,7 @@ use Tracy\Dumper;
 class PackageLoader implements Subscriber
 {
 
-    const classname = __CLASS__;
+    const CLASSNAME = __CLASS__;
 
     /** @var Package[] */
     private $packages = [];
@@ -270,4 +270,4 @@ class PackageLoader implements Subscriber
         return $this->packages;
     }
 
-} 
+}

@@ -22,11 +22,11 @@ class PackagesExtension extends CompilerExtension
         $builder = $this->getContainerBuilder();
 
         $builder->addDefinition($this->prefix('packageLoader'))
-            ->setClass(PackageLoader::classname, ['packagesDir' => $config['directory']])
+            ->setClass(PackageLoader::CLASSNAME, ['packagesDir' => $config['directory']])
             ->addTag(EventsExtension::SUBSCRIBER_TAG);
 
         $builder->addDefinition($this->prefix('assetsLoader'))
-            ->setClass(AssetsLoader::classname)
+            ->setClass(AssetsLoader::CLASSNAME)
             ->addTag(EventsExtension::SUBSCRIBER_TAG);
     }
 
