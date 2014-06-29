@@ -1,11 +1,11 @@
 <?php
-/**
- * @author Michal Vyšinský <vysinsky@live.com>
- */
 
 namespace AnnotateCms\Packages\Exceptions;
 
-class BadPackageVersionException extends \Exception
+use Exception;
+
+
+class BadPackageVersionException extends Exception
 {
 
 }

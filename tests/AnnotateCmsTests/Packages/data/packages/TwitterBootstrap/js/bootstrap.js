@@ -35,7 +35,7 @@ if (typeof jQuery === 'undefined') {
 
         for (var name in transEndEventNames) {
             if (el.style[name] !== undefined) {
-                return { end: transEndEventNames[name] }
+                return {end: transEndEventNames[name]}
             }
         }
 
@@ -365,7 +365,7 @@ if (typeof jQuery === 'undefined') {
 
         if ($next.hasClass('active')) return this.sliding = false
 
-        var e = $.Event('slide.bs.carousel', { relatedTarget: $next[0], direction: direction })
+        var e = $.Event('slide.bs.carousel', {relatedTarget: $next[0], direction: direction})
         this.$element.trigger(e)
         if (e.isDefaultPrevented()) return
 
@@ -676,7 +676,7 @@ if (typeof jQuery === 'undefined') {
                 $('<div class="dropdown-backdrop"/>').insertAfter($(this)).on('click', clearMenus)
             }
 
-            var relatedTarget = { relatedTarget: this }
+            var relatedTarget = {relatedTarget: this}
             $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
 
             if (e.isDefaultPrevented()) return
@@ -727,7 +727,7 @@ if (typeof jQuery === 'undefined') {
         $(backdrop).remove()
         $(toggle).each(function () {
             var $parent = getParent($(this))
-            var relatedTarget = { relatedTarget: this }
+            var relatedTarget = {relatedTarget: this}
             if (!$parent.hasClass('open')) return
             $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
             if (e.isDefaultPrevented()) return
@@ -831,7 +831,7 @@ if (typeof jQuery === 'undefined') {
 
     Modal.prototype.show = function (_relatedTarget) {
         var that = this
-        var e = $.Event('show.bs.modal', { relatedTarget: _relatedTarget })
+        var e = $.Event('show.bs.modal', {relatedTarget: _relatedTarget})
 
         this.$element.trigger(e)
 
@@ -864,7 +864,7 @@ if (typeof jQuery === 'undefined') {
 
             that.enforceFocus()
 
-            var e = $.Event('shown.bs.modal', { relatedTarget: _relatedTarget })
+            var e = $.Event('shown.bs.modal', {relatedTarget: _relatedTarget})
 
             transition ?
                 that.$element.find('.modal-dialog') // wait for modal to slide in
@@ -1016,7 +1016,7 @@ if (typeof jQuery === 'undefined') {
         var $this = $(this)
         var href = $this.attr('href')
         var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) //strip for ie7
-        var option = $target.data('bs.modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data())
+        var option = $target.data('bs.modal') ? 'toggle' : $.extend({remote: !/#/.test(href) && href}, $target.data(), $this.data())
 
         if ($this.is('a')) e.preventDefault()
 
@@ -1099,7 +1099,7 @@ if (typeof jQuery === 'undefined') {
         }
 
         this.options.selector ?
-            (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
+            (this._options = $.extend({}, this.options, {trigger: 'manual', selector: ''})) :
             this.fixTitle()
     }
 
@@ -1186,7 +1186,7 @@ if (typeof jQuery === 'undefined') {
 
             $tip
                 .detach()
-                .css({ top: 0, left: 0, display: 'block' })
+                .css({top: 0, left: 0, display: 'block'})
                 .addClass(placement)
 
             this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
@@ -1351,10 +1351,10 @@ if (typeof jQuery === 'undefined') {
     }
 
     Tooltip.prototype.getCalculatedOffset = function (placement, pos, actualWidth, actualHeight) {
-        return placement == 'bottom' ? { top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2  } :
-            placement == 'top' ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2  } :
-                placement == 'left' ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
-                    /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width   }
+        return placement == 'bottom' ? {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2} :
+            placement == 'top' ? {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2} :
+                placement == 'left' ? {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth} :
+                    /* placement == 'right' */ {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}
     }
 
     Tooltip.prototype.getTitle = function () {
@@ -1918,7 +1918,7 @@ if (typeof jQuery === 'undefined') {
             .trigger($.Event(affixType.replace('affix', 'affixed')))
 
         if (affix == 'bottom') {
-            this.$element.offset({ top: scrollHeight - offsetBottom - this.$element.height() })
+            this.$element.offset({top: scrollHeight - offsetBottom - this.$element.height()})
         }
     }
 

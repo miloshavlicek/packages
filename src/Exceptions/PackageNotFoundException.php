@@ -1,11 +1,11 @@
 <?php
-/**
- * @author Michal Vyšinský <vysinsky@live.com>
- */
 
 namespace AnnotateCms\Packages\Exceptions;
 
-class PackageNotFoundException extends \Exception
+use Exception;
+
+
+class PackageNotFoundException extends Exception
 {
 
 }
