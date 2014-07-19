@@ -188,8 +188,8 @@ class PackageLoader implements Subscriber
 		$this->loadPackageAssets($packageVariant, $package);
 
 		$this->loadedPackages[] = [
-			"name"         => $name,
-			"version"      => $version,
+			"name"         => $package->getName(),
+			"version"      => $package->getVersion(),
 			"variant"      => $packageVariant,
 			"dependencies" => $package->getDependencies()
 		];
