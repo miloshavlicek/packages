@@ -7,7 +7,7 @@ use AnnotateCms\Packages\Package;
 use AnnotateCms\Packages\ThemeAsset;
 use AnnotateCms\Themes\Theme;
 use Latte\Engine;
-use Nette\Bridges\ApplicationLatte\Template;
+use Latte\Template;
 use Tester;
 use Tester\Assert;
 
@@ -124,7 +124,8 @@ class AssetsLoaderTest extends TestCase
 
 	public function testItAddsTemplateVariablesOnSetupTemplate()
 	{
-		$template = new Template(new Engine());
+		$filters = [];
+		$template = new Template([], $filters, new Engine, 'template');
 		$this->assetsLoader->onSetupTemplate($template);
 		Assert::equal([], $template->styles);
 		Assert::equal([], $template->scripts);

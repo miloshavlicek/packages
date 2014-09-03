@@ -9,11 +9,17 @@
             "email": "vysinsky@live.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4",
         "annotatecms/extensions-installer": "@dev",
         "annotatecms/diagnostics": "@dev",
-        "annotatecms/events": "@dev"
+        "annotatecms/events": "@dev",
+        "latte/latte": "@dev",
+        "nette/http": "@dev",
+        "nette/security": "@dev",
+        "nette/application": "@dev",
+        "nette/safe-stream": "@dev"
     },
     "require-dev": {
         "nette/tester": "@dev",
