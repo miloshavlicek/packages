@@ -7,7 +7,7 @@ use AnnotateCms\Packages\Package;
 use AnnotateCms\Packages\ThemeAsset;
 use AnnotateCms\Themes\Theme;
 use Kdyby\Events\Subscriber;
-use Latte\Template;
+use Nette\Bridges\ApplicationLatte\Template;
 
 
 class AssetsLoader implements Subscriber

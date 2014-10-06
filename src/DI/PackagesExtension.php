@@ -18,19 +18,22 @@ class PackagesExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('packageLoader'))
-			->setClass(PackageLoader::CLASSNAME, ['packagesDir' => $config['directory']])
-			->addTag(EventsExtension::SUBSCRIBER_TAG);
+				->setClass(PackageLoader::CLASSNAME, [
+					'packagesDir' => $config['directory'],
+					'rootDir' => $builder->expand('%appDir%') . '/../'
+				])
+				->addTag(EventsExtension::SUBSCRIBER_TAG);
 
 		$builder->addDefinition($this->prefix('assetsLoader'))
-			->setClass(AssetsLoader::CLASSNAME)
-			->addTag(EventsExtension::SUBSCRIBER_TAG);
+				->setClass(AssetsLoader::CLASSNAME)
+				->addTag(EventsExtension::SUBSCRIBER_TAG);
 	}
 
 
 	private function getDefaults()
 	{
 		return [
-			'directory' => '%appDir%/app/addons/packages/',
+			'directory' => '%appDir%/addons/packages/',
 		];
 	}
 

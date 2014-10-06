@@ -9,6 +9,7 @@ use AnnotateCms\Packages\Exceptions\PackageNotFoundException;
 use AnnotateCms\Packages\Exceptions\PackageVariantNotFoundException;
 use AnnotateCms\Packages\Package;
 use AnnotateCms\Themes\Theme;
+use Exception;
 use Kdyby\Events\Subscriber;
 use Nette\DI\Config\Adapters\NeonAdapter;
 use Nette\Utils\Finder;
@@ -33,10 +34,14 @@ class PackageLoader implements Subscriber
 	/** @var string */
 	private $packagesDir;
 
+	/** @var string */
+	private $rootDir;
 
-	public function __construct($packagesDir, AssetsLoader $assetsLoader)
+
+	public function __construct($packagesDir, $rootDir, AssetsLoader $assetsLoader)
 	{
 		$this->packagesDir = $packagesDir;
+		$this->rootDir = realpath($rootDir);
 		$this->assetsLoader = $assetsLoader;
 		$this->load();
 	}
@@ -45,6 +50,10 @@ class PackageLoader implements Subscriber
 	public function load()
 	{
 
+		if (!is_dir($this->packagesDir)) {
+			throw new Exception('Packages directory "' . $this->packagesDir . '" not found.');
+		}
+
 		$adapter = new NeonAdapter();
 
 		foreach (Finder::findFiles("*.package.neon")->from($this->packagesDir) as $path => $file) {
@@ -52,7 +61,7 @@ class PackageLoader implements Subscriber
 			$neon = $adapter->load($path);
 			$this->mergeVariants($neon);
 			$aDir = dirname($path);
-			$rDir = str_replace(ROOT_DIR, "/", $aDir);
+			$rDir = str_replace($this->rootDir, NULL, $aDir);
 			$dependencies = isset($neon["dependencies"]) ? $neon["dependencies"] : NULL;
 			$this->packages[$neon["name"]] = new Package(
 				$neon["name"],
@@ -188,9 +197,9 @@ class PackageLoader implements Subscriber
 		$this->loadPackageAssets($packageVariant, $package);
 
 		$this->loadedPackages[] = [
-			"name"         => $package->getName(),
-			"version"      => $package->getVersion(),
-			"variant"      => $packageVariant,
+			"name" => $package->getName(),
+			"version" => $package->getVersion(),
+			"variant" => $packageVariant,
 			"dependencies" => $package->getDependencies()
 		];
 
