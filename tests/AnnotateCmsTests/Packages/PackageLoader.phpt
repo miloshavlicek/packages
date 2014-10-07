@@ -31,9 +31,9 @@ class PackageLoaderTest extends TestCase
 	private function createPackageLoader($assetLoaderMock = NULL)
 	{
 		if ($assetLoaderMock) {
-			return new PackageLoader(ROOT_DIR . '/Packages/data/packages', $assetLoaderMock);
+			return new PackageLoader(ROOT_DIR . '/Packages/data/packages', ROOT_DIR, $assetLoaderMock);
 		} else {
-			return new PackageLoader(ROOT_DIR . '/Packages/data/packages', $this->createAssetLoaderMock());
+			return new PackageLoader(ROOT_DIR . '/Packages/data/packages', ROOT_DIR, $this->createAssetLoaderMock());
 		}
 	}
 
