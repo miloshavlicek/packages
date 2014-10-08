@@ -5,15 +5,21 @@ AnnotateCms/Packages
 [![Downloads this Month](https://img.shields.io/packagist/dm/annotatecms/packages.svg)](https://packagist.org/packages/annotatecms/packages)
 [![Latest stable](https://img.shields.io/packagist/v/annotatecms/packages.svg)](https://packagist.org/packages/annotatecms/packages)
 
+Requirements
+------------
+- PHP 5.4
+- [Nette Framework](https://github.com/nette/nette)
+- [annotatecms/extensions-installer](https://github.com/annotatecms/extensions-installer)
+- [annotatecms/diagnostics](https://github.com/annotatecms/diagnostics)
+- [annotatecms/events](https://github.com/annotatecms/events)
 
 Installation
 ------------
 Run:
 
-    composer require annotatecms/packages:@dev
-
-Thanks to annotatecms/extensions-installer extension will be automatically registered.
-If not, just add `packages: AnnotateCms\Packages\DI\PackagesExtension` to your `extensions` section.
+```sh
+$ composer require annotatecms/packages:@dev
+```
 
 Documentation
 -------------
