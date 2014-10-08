@@ -1,26 +1,21 @@
-[![Build Status](https://travis-ci.org/annotatecms/packages.svg)](https://travis-ci.org/annotatecms/packages)
-
-Packages package for AnnotateCms
+AnnotateCms/Packages
 ================================
 
-This package provides powerfull packages support. You can create package (for js/css library) and require it with theme or component
+[![Build Status](https://travis-ci.org/annotatecms/packages.svg?branch=master)](https://travis-ci.org/annotatecms/packages)
+[![Downloads this Month](https://img.shields.io/packagist/dm/annotatecms/packages.svg)](https://packagist.org/packages/annotatecms/packages)
+[![Latest stable](https://img.shields.io/packagist/v/annotatecms/packages.svg)](https://packagist.org/packages/annotatecms/packages)
 
 
 Installation
 ------------
-
-Note: this works when annotatecms/sandbox is installed
-
 Run:
 
     composer require annotatecms/packages:@dev
-  
-Hint!
------
-If you are using annotatecms/themes just press F5 in browser! Packages required by the theme will be loaded automatically!
 
-    
-Uninstall
----------
+Thanks to annotatecms/extensions-installer extension will be automatically registered.
+If not, just add `packages: AnnotateCms\Packages\DI\PackagesExtension` to your `extensions` section.
 
-Just remove line with `annotatecms/packages` from composer.json and run `composer update`
+Documentation
+-------------
+
+Learn more in the [documentation](docs/en/index.md)
