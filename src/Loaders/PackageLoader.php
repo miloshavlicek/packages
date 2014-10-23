@@ -3,12 +3,13 @@
 namespace AnnotateCms\Packages\Loaders;
 
 use AnnotateCms\Diagnostics\CmsPanel;
+use AnnotateCms\Framework\Utils\Strings;
 use AnnotateCms\Packages\Asset;
 use AnnotateCms\Packages\Exceptions\BadPackageVersionException;
 use AnnotateCms\Packages\Exceptions\PackageNotFoundException;
 use AnnotateCms\Packages\Exceptions\PackageVariantNotFoundException;
 use AnnotateCms\Packages\Package;
-use Exception;
+use AnnotateCms\Themes\Theme;
 use Kdyby\Events\Subscriber;
 use Nette\DI\Config\Adapters\NeonAdapter;
 use Nette\Utils\Finder;
@@ -41,6 +42,11 @@ class PackageLoader implements Subscriber
 
 	public function __construct($directories, $rootDir, AssetsLoader $assetsLoader)
 	{
+		foreach ($directories as $key => $directory) {
+			if (!is_dir($directory)) {
+				unset($directories[$key]);
+			}
+		}
 		$this->directories = $directories;
 		$this->rootDir = realpath($rootDir);
 		$this->assetsLoader = $assetsLoader;
@@ -50,59 +56,13 @@ class PackageLoader implements Subscriber
 
 	public function load()
 	{
-
-		foreach ($this->directories as $directory) {
-			if (!is_dir($directory)) {
-				throw new Exception('Packages directory "' . $directory . '" not found.');
-			}
+		if(!$this->directories) {
+			return;
 		}
 
-		$adapter = new NeonAdapter();
-
-		foreach (Finder::findFiles("*.package.neon")->from($this->directories) as $path => $file) {
-			/** @var $file \SplFileInfo */
-			$neon = $adapter->load($path);
-			$this->mergeVariants($neon);
-			$aDir = dirname($path);
-			$rDir = str_replace($this->rootDir, NULL, $aDir);
-			$dependencies = isset($neon["dependencies"]) ? $neon["dependencies"] : NULL;
-			$this->packages[$neon["name"]] = new Package(
-				$neon["name"],
-				$neon["version"],
-				$neon["variants"],
-				$dependencies,
-				$aDir,
-				$rDir
-			);
-		}
-
-		foreach (Finder::findFiles("bower.json")->from($this->directories) as $path => $file) {
-			$data = Json::decode(file_get_contents($path));
-
-			$aDir = dirname($path);
-			$rDir = str_replace($this->rootDir, NULL, $aDir);
-			$dependencies = isset($data->dependencies) ? $data->dependencies : NULL;
-
-			$files = is_array($data->main) ? $data->main : [$data->main];
-
-			array_walk($files, function (&$file) {
-				$file = '@' . $file;
-			});
-
-			$this->packages[$data->name] = new Package(
-				$data->name,
-				$data->version,
-				[
-					'default' => ['scripts' => $files]
-				],
-				$dependencies,
-				$aDir,
-				$rDir
-			);
-		}
-
+		$this->processNeon();
+		$this->processJson();
 		$this->addDebugSection();
-
 	}
 
 
@@ -186,8 +146,13 @@ class PackageLoader implements Subscriber
 		}
 
 		foreach ($theme->getDependencies() as $name => $info) {
-			$version = isset($info["version"]) ? $info["version"] : NULL;
-			$variant = isset($info["variant"]) ? $info["variant"] : "default";
+			if (!is_array($info)) {
+				$version = $info;
+				$variant = 'default';
+			} else {
+				$version = isset($info["version"]) ? $info["version"] : NULL;
+				$variant = isset($info["variant"]) ? $info["variant"] : "default";
+			}
 
 			try {
 				$this->loadPackage($name, $version, $variant);
@@ -213,8 +178,13 @@ class PackageLoader implements Subscriber
 		if ($package->getDependencies()) {
 			if (!$package->isChecked()) {
 				foreach ($package->getDependencies() as $dep_name => $info) {
-					$dep_version = isset($info->version) ? $info->version : NULL;
-					$variant = isset($info->variant) ? $info->variant : "default";
+					if (!is_array($info)) {
+						$dep_version = $info;
+						$variant = 'default';
+					} else {
+						$dep_version = isset($info['version']) ? $info['version'] : NULL;
+						$variant = isset($info['variant']) ? $info['variant'] : "default";
+					}
 					$this->loadPackage($dep_name, $dep_version, $variant);
 				}
 				$package->setChecked();
@@ -258,11 +228,18 @@ class PackageLoader implements Subscriber
 		/* @var Package */
 		$package = $this->packages[$name];
 
-		if ($version && version_compare($package->getVersion(), $version) < 0) {
-			throw new BadPackageVersionException(
-				"Package '$name' is version {$package->getVersion()},
-            but version $version required."
-			);
+		if ($version) {
+			$version = str_replace('~', NULL, $version);
+			$matches = Strings::match($version, '~(lt|<>|<=|le|>=|<|>|gt|ge|==|=|eq|!=|ne)*\s?(.+)~i');
+
+			$versionNumber = $matches[2];
+			$versionOperator = $matches[1];
+
+			if (version_compare($package->getVersion(), $versionNumber, $versionOperator ?: '=') === FALSE) {
+				throw new BadPackageVersionException(
+					"Package '$name' is version {$package->getVersion()}, but version $version required."
+				);
+			}
 		}
 
 		return $package;
@@ -302,6 +279,60 @@ class PackageLoader implements Subscriber
 	public function getPackages()
 	{
 		return $this->packages;
+	}
+
+
+
+	private function processNeon()
+	{
+		$adapter = new NeonAdapter;
+		foreach (Finder::findFiles("*.package.neon")->from($this->directories) as $path => $file) {
+
+			/** @var $file \SplFileInfo */
+			$neon = $adapter->load($path);
+			$this->mergeVariants($neon);
+			$aDir = dirname($path);
+			$rDir = str_replace($this->rootDir, NULL, $aDir);
+			$dependencies = isset($neon["dependencies"]) ? $neon["dependencies"] : NULL;
+			$this->packages[$neon["name"]] = new Package(
+				$neon["name"],
+				$neon["version"],
+				$neon["variants"],
+				$dependencies,
+				$aDir,
+				$rDir
+			);
+		}
+	}
+
+
+
+	private function processJson()
+	{
+		foreach (Finder::findFiles("bower.json")->from($this->directories) as $path => $file) {
+			$data = Json::decode(file_get_contents($path), Json::FORCE_ARRAY);
+
+			$aDir = dirname($path);
+			$rDir = str_replace($this->rootDir, NULL, $aDir);
+			$dependencies = isset($data['dependencies']) ? $data['dependencies'] : NULL;
+
+			$files = is_array($data['main']) ? $data['main'] : [$data['main']];
+
+			array_walk($files, function (&$file) {
+				$file = '@' . $file;
+			});
+
+			$this->packages[$data['name']] = new Package(
+				$data['name'],
+				$data['version'],
+				[
+					'default' => ['scripts' => $files]
+				],
+				$dependencies,
+				$aDir,
+				$rDir
+			);
+		}
 	}
 
 }
