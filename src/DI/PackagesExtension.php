@@ -19,21 +19,24 @@ class PackagesExtension extends CompilerExtension
 
 		$builder->addDefinition($this->prefix('packageLoader'))
 				->setClass(PackageLoader::CLASSNAME, [
-					'packagesDir' => $config['directory'],
-					'rootDir' => $builder->expand('%appDir%') . '/../'
+					'directories' => $config['directories'],
+					'rootDir' => $config['rootDir'],
 				])
-				->addTag(EventsExtension::SUBSCRIBER_TAG);
+			->addTag(EventsExtension::TAG_SUBSCRIBER);
 
 		$builder->addDefinition($this->prefix('assetsLoader'))
 				->setClass(AssetsLoader::CLASSNAME)
-				->addTag(EventsExtension::SUBSCRIBER_TAG);
+			->addTag(EventsExtension::TAG_SUBSCRIBER);
 	}
 
 
 	private function getDefaults()
 	{
 		return [
-			'directory' => '%appDir%/addons/packages/',
+			'directories' => [
+				'%wwwDir%/bower_components/',
+			],
+			'rootDir' => '%wwwDir%'
 		];
 	}
 

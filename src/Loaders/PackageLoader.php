@@ -8,11 +8,11 @@ use AnnotateCms\Packages\Exceptions\BadPackageVersionException;
 use AnnotateCms\Packages\Exceptions\PackageNotFoundException;
 use AnnotateCms\Packages\Exceptions\PackageVariantNotFoundException;
 use AnnotateCms\Packages\Package;
-use AnnotateCms\Themes\Theme;
 use Exception;
 use Kdyby\Events\Subscriber;
 use Nette\DI\Config\Adapters\NeonAdapter;
 use Nette\Utils\Finder;
+use Nette\Utils\Json;
 use Tracy\Dumper;
 
 
@@ -31,16 +31,17 @@ class PackageLoader implements Subscriber
 
 	private $loadedPackages = [];
 
-	/** @var string */
-	private $packagesDir;
+	/** @var string[] */
+	private $directories;
 
 	/** @var string */
 	private $rootDir;
 
 
-	public function __construct($packagesDir, $rootDir, AssetsLoader $assetsLoader)
+
+	public function __construct($directories, $rootDir, AssetsLoader $assetsLoader)
 	{
-		$this->packagesDir = $packagesDir;
+		$this->directories = $directories;
 		$this->rootDir = realpath($rootDir);
 		$this->assetsLoader = $assetsLoader;
 		$this->load();
@@ -50,13 +51,15 @@ class PackageLoader implements Subscriber
 	public function load()
 	{
 
-		if (!is_dir($this->packagesDir)) {
-			throw new Exception('Packages directory "' . $this->packagesDir . '" not found.');
+		foreach ($this->directories as $directory) {
+			if (!is_dir($directory)) {
+				throw new Exception('Packages directory "' . $directory . '" not found.');
+			}
 		}
 
 		$adapter = new NeonAdapter();
 
-		foreach (Finder::findFiles("*.package.neon")->from($this->packagesDir) as $path => $file) {
+		foreach (Finder::findFiles("*.package.neon")->from($this->directories) as $path => $file) {
 			/** @var $file \SplFileInfo */
 			$neon = $adapter->load($path);
 			$this->mergeVariants($neon);
@@ -67,6 +70,31 @@ class PackageLoader implements Subscriber
 				$neon["name"],
 				$neon["version"],
 				$neon["variants"],
+				$dependencies,
+				$aDir,
+				$rDir
+			);
+		}
+
+		foreach (Finder::findFiles("bower.json")->from($this->directories) as $path => $file) {
+			$data = Json::decode(file_get_contents($path));
+
+			$aDir = dirname($path);
+			$rDir = str_replace($this->rootDir, NULL, $aDir);
+			$dependencies = isset($data->dependencies) ? $data->dependencies : NULL;
+
+			$files = is_array($data->main) ? $data->main : [$data->main];
+
+			array_walk($files, function (&$file) {
+				$file = '@' . $file;
+			});
+
+			$this->packages[$data->name] = new Package(
+				$data->name,
+				$data->version,
+				[
+					'default' => ['scripts' => $files]
+				],
 				$dependencies,
 				$aDir,
 				$rDir
