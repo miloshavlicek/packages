@@ -25,9 +25,7 @@ class PackageLoader implements Subscriber
 	/** @var Package[] */
 	private $packages = [];
 
-	/**
-	 * @var AssetsLoader
-	 */
+	/** @var AssetsLoader */
 	private $assetsLoader;
 
 	private $loadedPackages = [];
@@ -37,7 +35,6 @@ class PackageLoader implements Subscriber
 
 	/** @var string */
 	private $rootDir;
-
 
 
 	public function __construct($directories, $rootDir, AssetsLoader $assetsLoader)
@@ -56,7 +53,7 @@ class PackageLoader implements Subscriber
 
 	public function load()
 	{
-		if(!$this->directories) {
+		if (!$this->directories) {
 			return;
 		}
 
@@ -66,42 +63,89 @@ class PackageLoader implements Subscriber
 	}
 
 
+	private function processNeon()
+	{
+		$adapter = new NeonAdapter;
+		foreach (Finder::findFiles('*.package.neon')->from($this->directories) as $path => $file) {
+			/** @var $file \SplFileInfo */
+			$neon = $adapter->load($path);
+			$this->mergeVariants($neon);
+			$aDir = dirname($path);
+			$rDir = str_replace($this->rootDir, NULL, $aDir);
+			$dependencies = isset($neon['dependencies']) ? $neon['dependencies'] : NULL;
+			$this->packages[$neon['name']] = new Package(
+				$neon['name'],
+				$neon['version'],
+				$neon['variants'],
+				$dependencies,
+				$aDir,
+				$rDir
+			);
+		}
+	}
+
+
 	private function mergeVariants(&$neon)
 	{
-		foreach ($neon["variants"] as $name => $variant) {
-			if (isset($variant["_extends"])) {
-				$extendsName = $variant["_extends"];
-				if (!isset($neon["variants"][$extendsName])) {
-					throw new \RuntimeException(
-						"Cannot extend package variant '$name'. Undefined package variant '$extendsName'"
-					);
+		foreach ($neon['variants'] as $name => $variant) {
+			if (isset($variant['_extends'])) {
+				$extendsName = $variant['_extends'];
+				if (!isset($neon['variants'][$extendsName])) {
+					throw new \RuntimeException('Cannot extend package variant "' . $name . '". Undefined package variant "' . $extendsName . '"');
 				}
-				$extends = $neon["variants"][$extendsName];
-				if (!isset($variant["styles"])) {
-					$variant["styles"] = [];
+				$extends = $neon['variants'][$extendsName];
+				if (!isset($variant['styles'])) {
+					$variant['styles'] = [];
 				}
-				if (!isset($variant["scripts"])) {
-					$variant["scripts"] = [];
+				if (!isset($variant['scripts'])) {
+					$variant['scripts'] = [];
 				}
-				if (!isset($extends["styles"])) {
-					$extends["styles"] = [];
+				if (!isset($extends['styles'])) {
+					$extends['styles'] = [];
 				}
-				if (!isset($extends["scripts"])) {
-					$extends["scripts"] = [];
+				if (!isset($extends['scripts'])) {
+					$extends['scripts'] = [];
 				}
 
-				foreach ($extends["styles"] as $extendsStyle) {
-					array_unshift($variant["styles"], $extendsStyle);
+				foreach ($extends['styles'] as $extendsStyle) {
+					array_unshift($variant['styles'], $extendsStyle);
 				}
 
-				foreach ($extends["scripts"] as $extendsScript) {
-					array_unshift($variant["scripts"], $extendsScript);
+				foreach ($extends['scripts'] as $extendsScript) {
+					array_unshift($variant['scripts'], $extendsScript);
 				}
 
-				$neon["variants"][$name]["styles"] = $variant["styles"];
-				$neon["variants"][$name]["scripts"] = $variant["scripts"];
-				unset($variant["_extends"]);
+				$neon['variants'][$name]['styles'] = $variant['styles'];
+				$neon['variants'][$name]['scripts'] = $variant['scripts'];
+				unset($variant['_extends']);
 			}
+		}
+	}
+
+
+	private function processJson()
+	{
+		foreach (Finder::findFiles('bower.json')->from($this->directories) as $path => $file) {
+			$data = Json::decode(file_get_contents($path), Json::FORCE_ARRAY);
+
+			$aDir = dirname($path);
+			$rDir = str_replace($this->rootDir, NULL, $aDir);
+			$dependencies = isset($data['dependencies']) ? $data['dependencies'] : NULL;
+
+			$files = is_array($data['main']) ? $data['main'] : [$data['main']];
+
+			array_walk($files, function (&$file) {
+				$file = '@' . $file;
+			});
+
+			$this->packages[$data['name']] = new Package(
+				$data['name'],
+				$data['version'],
+				['default' => ['scripts' => $files]],
+				$dependencies,
+				$aDir,
+				$rDir
+			);
 		}
 	}
 
@@ -111,16 +155,16 @@ class PackageLoader implements Subscriber
 		$self = $this;
 		CmsPanel::$sections[] = function () use ($self) {
 			$packages = $self->loadedPackages;
-			$html = "<h2>Loaded Packages:</h2>";
-			$html .= "<div><table>";
-			$html .= "<thead><tr><th>Name</th><th>Version</th><th>Variant</th><th>Deps</th></tr></thead>";
+			$html = '<h2>Loaded Packages:</h2>';
+			$html .= '<div><table>';
+			$html .= '<thead><tr><th>Name</th><th>Version</th><th>Variant</th><th>Deps</th></tr></thead>';
 			foreach ($packages as $package) {
-				$html .= "<tr><td>" . $package["name"] . "</td><td>" . $package["version"] . "</td><td>" . $package["variant"] . "</td><td>" . Dumper::toHtml(
-						$package["dependencies"],
+				$html .= '<tr><td>' . $package['name'] . '</td><td>' . $package['version'] . '</td><td>' . $package['variant'] . '</td><td>' . Dumper::toHtml(
+						$package['dependencies'],
 						[Dumper::COLLAPSE => TRUE]
-					) . "</td></tr>";
+					) . '</td></tr>';
 			}
-			$html .= "</table></div>";
+			$html .= '</table></div>';
 
 			return $html;
 		};
@@ -130,7 +174,7 @@ class PackageLoader implements Subscriber
 	public function getSubscribedEvents()
 	{
 		return [
-			"AnnotateCms\\Themes\\Loaders\\ThemesLoader::onActivateTheme"
+			'AnnotateCms\\Themes\\Loaders\\ThemesLoader::onActivateTheme'
 		];
 	}
 
@@ -150,25 +194,23 @@ class PackageLoader implements Subscriber
 				$version = $info;
 				$variant = 'default';
 			} else {
-				$version = isset($info["version"]) ? $info["version"] : NULL;
-				$variant = isset($info["variant"]) ? $info["variant"] : "default";
+				$version = isset($info['version']) ? $info['version'] : NULL;
+				$variant = isset($info['variant']) ? $info['variant'] : 'default';
 			}
 
 			try {
 				$this->loadPackage($name, $version, $variant);
 			} catch (PackageNotFoundException $e) {
-				throw new PackageNotFoundException("Theme cannot be loaded. Package '$name' does not exist.", 0, $e);
+				throw new PackageNotFoundException('Theme cannot be loaded. Package "' . $name . '" does not exist.', 0, $e);
 			} catch (BadPackageVersionException $e) {
-				throw new BadPackageVersionException(
-					"Theme cannot be loaded. Theme requires '$name' version '$version'", 0, $e
-				);
+				throw new BadPackageVersionException('Theme cannot be loaded. Theme requires "' . $name . '" version "' . $version . '"', 0, $e);
 			}
 		}
 		$theme->setChecked();
 	}
 
 
-	public function loadPackage($name, $version = NULL, $packageVariant = "default")
+	public function loadPackage($name, $version = NULL, $packageVariant = 'default')
 	{
 		/** @var Package $package */
 		$package = $this->getPackage($name, $version, $packageVariant);
@@ -183,7 +225,7 @@ class PackageLoader implements Subscriber
 						$variant = 'default';
 					} else {
 						$dep_version = isset($info['version']) ? $info['version'] : NULL;
-						$variant = isset($info['variant']) ? $info['variant'] : "default";
+						$variant = isset($info['variant']) ? $info['variant'] : 'default';
 					}
 					$this->loadPackage($dep_name, $dep_version, $variant);
 				}
@@ -195,10 +237,10 @@ class PackageLoader implements Subscriber
 		$this->loadPackageAssets($packageVariant, $package);
 
 		$this->loadedPackages[] = [
-			"name" => $package->getName(),
-			"version" => $package->getVersion(),
-			"variant" => $packageVariant,
-			"dependencies" => $package->getDependencies()
+			'name' => $package->getName(),
+			'version' => $package->getVersion(),
+			'variant' => $packageVariant,
+			'dependencies' => $package->getDependencies()
 		];
 
 		$package->setLoaded();
@@ -206,23 +248,23 @@ class PackageLoader implements Subscriber
 
 
 	/**
-	 * @param        $name
-	 * @param null   $version
-	 * @param string $variant
+	 * @param  string
+	 * @param  string
+	 * @param  string
 	 *
 	 * @throws BadPackageVersionException
-	 * @throws \AnnotateCms\Packages\Exceptions\PackageVariantNotFoundException
-	 * @throws \AnnotateCms\Packages\Exceptions\PackageNotFoundException
+	 * @throws PackageVariantNotFoundException
+	 * @throws PackageNotFoundException
 	 * @return Package
 	 */
-	public function getPackage($name, $version = NULL, $variant = "default")
+	public function getPackage($name, $version = NULL, $variant = 'default')
 	{
 		if (!isset($this->packages[$name])) {
-			throw new PackageNotFoundException("Package '$name' does not exist");
+			throw new PackageNotFoundException('Package "' . $name . '" does not exist');
 		}
 
 		if (!$this->packages[$name]->hasVariant($variant)) {
-			throw new PackageVariantNotFoundException("Package '$name' does not have variant '$variant'");
+			throw new PackageVariantNotFoundException('Package "' . $name . '" does not have variant "' . $variant . '"');
 		}
 
 		/* @var Package */
@@ -236,9 +278,7 @@ class PackageLoader implements Subscriber
 			$versionOperator = $matches[1];
 
 			if (version_compare($package->getVersion(), $versionNumber, $versionOperator ?: '=') === FALSE) {
-				throw new BadPackageVersionException(
-					"Package '$name' is version {$package->getVersion()}, but version $version required."
-				);
+				throw new BadPackageVersionException('Package "$name" is version "' . $package->getVersion() . '", but version "' . $version . '" required.');
 			}
 		}
 
@@ -247,25 +287,26 @@ class PackageLoader implements Subscriber
 
 
 	/**
-	 * @param $packageVariant
-	 * @param $package
+	 * @param  string
+	 * @param  Package $package
+	 * @return void
 	 */
 	private function loadPackageAssets($packageVariant, Package $package)
 	{
 		$variants = $package->getVariants();
 		$requiredVariant = $variants[$packageVariant];
 
-		if (isset($requiredVariant["scripts"])) {
+		if (isset($requiredVariant['scripts'])) {
 			$scripts = [];
-			foreach ($requiredVariant["scripts"] as $script) {
+			foreach ($requiredVariant['scripts'] as $script) {
 				$scripts[] = new Asset($package, $script);
 			}
 			$this->assetsLoader->addScripts($scripts);
 		}
 
-		if (isset($requiredVariant["styles"])) {
+		if (isset($requiredVariant['styles'])) {
 			$styles = [];
-			foreach ($requiredVariant["styles"] as $style) {
+			foreach ($requiredVariant['styles'] as $style) {
 				$styles[] = new Asset($package, $style);
 			}
 			$this->assetsLoader->addStyles($styles);
@@ -274,65 +315,11 @@ class PackageLoader implements Subscriber
 
 
 	/**
-	 * @return \AnnotateCms\Packages\Package[]
+	 * @return Package[]
 	 */
 	public function getPackages()
 	{
 		return $this->packages;
-	}
-
-
-
-	private function processNeon()
-	{
-		$adapter = new NeonAdapter;
-		foreach (Finder::findFiles("*.package.neon")->from($this->directories) as $path => $file) {
-
-			/** @var $file \SplFileInfo */
-			$neon = $adapter->load($path);
-			$this->mergeVariants($neon);
-			$aDir = dirname($path);
-			$rDir = str_replace($this->rootDir, NULL, $aDir);
-			$dependencies = isset($neon["dependencies"]) ? $neon["dependencies"] : NULL;
-			$this->packages[$neon["name"]] = new Package(
-				$neon["name"],
-				$neon["version"],
-				$neon["variants"],
-				$dependencies,
-				$aDir,
-				$rDir
-			);
-		}
-	}
-
-
-
-	private function processJson()
-	{
-		foreach (Finder::findFiles("bower.json")->from($this->directories) as $path => $file) {
-			$data = Json::decode(file_get_contents($path), Json::FORCE_ARRAY);
-
-			$aDir = dirname($path);
-			$rDir = str_replace($this->rootDir, NULL, $aDir);
-			$dependencies = isset($data['dependencies']) ? $data['dependencies'] : NULL;
-
-			$files = is_array($data['main']) ? $data['main'] : [$data['main']];
-
-			array_walk($files, function (&$file) {
-				$file = '@' . $file;
-			});
-
-			$this->packages[$data['name']] = new Package(
-				$data['name'],
-				$data['version'],
-				[
-					'default' => ['scripts' => $files]
-				],
-				$dependencies,
-				$aDir,
-				$rDir
-			);
-		}
 	}
 
 }

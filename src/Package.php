@@ -84,7 +84,7 @@ class Package
 
 	public function getRelativePath()
 	{
-		return str_replace("\\", "/", $this->rDir) . "/";
+		return str_replace('\\', '/', $this->rDir) . '/';
 	}
 
 

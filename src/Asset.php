@@ -21,7 +21,7 @@ class Asset implements IAsset
 
 	public function getRelativePath($basePath)
 	{
-		return str_replace("@", $basePath . $this->package->getRelativePath(), $this->fileName);
+		return str_replace('@', $basePath . $this->package->getRelativePath(), $this->fileName);
 	}
 
 }

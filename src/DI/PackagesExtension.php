@@ -12,32 +12,29 @@ use Nette\DI\CompilerExtension;
 class PackagesExtension extends CompilerExtension
 {
 
+	private $defaults = [
+		'directories' => [
+			'%wwwDir%/bower_components/',
+		],
+		'rootDir' => '%wwwDir%'
+	];
+
+
 	public function loadConfiguration()
 	{
-		$config = $this->getConfig($this->getDefaults());
+		$config = $this->getConfig($this->defaults);
 		$builder = $this->getContainerBuilder();
 
 		$builder->addDefinition($this->prefix('packageLoader'))
-				->setClass(PackageLoader::CLASSNAME, [
-					'directories' => $config['directories'],
-					'rootDir' => $config['rootDir'],
-				])
+			->setClass(PackageLoader::CLASSNAME, [
+				'directories' => $config['directories'],
+				'rootDir' => $config['rootDir'],
+			])
 			->addTag(EventsExtension::TAG_SUBSCRIBER);
 
 		$builder->addDefinition($this->prefix('assetsLoader'))
-				->setClass(AssetsLoader::CLASSNAME)
+			->setClass(AssetsLoader::CLASSNAME)
 			->addTag(EventsExtension::TAG_SUBSCRIBER);
-	}
-
-
-	private function getDefaults()
-	{
-		return [
-			'directories' => [
-				'%wwwDir%/bower_components/',
-			],
-			'rootDir' => '%wwwDir%'
-		];
 	}
 
 }
