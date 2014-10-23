@@ -4,8 +4,6 @@ namespace AnnotateCms\Packages\Loaders;
 
 
 use AnnotateCms\Packages\Package;
-use AnnotateCms\Packages\ThemeAsset;
-use AnnotateCms\Themes\Theme;
 use Kdyby\Events\Subscriber;
 use Nette\Bridges\ApplicationLatte\Template;
 
@@ -51,26 +49,7 @@ class AssetsLoader implements Subscriber
 	{
 		return [
 			"AnnotateCms\\Templating\\TemplateFactory::onSetupTemplate",
-			"AnnotateCms\\Themes\\Loaders\\ThemesLoader::onActivateTheme",
 		];
-	}
-
-
-	public function onActivateTheme(Theme $theme)
-	{
-		$styles = $theme->getStyles();
-		$stylesAssets = [];
-		foreach ($styles as $style) {
-			$stylesAssets[] = new ThemeAsset($theme, $style);
-		}
-		$this->addStyles($stylesAssets);
-
-		$scripts = $theme->getScripts();
-		$scriptsAssets = [];
-		foreach ($scripts as $script) {
-			$scriptsAssets[] = new ThemeAsset($theme, $script);
-		}
-		$this->addScripts($scriptsAssets);
 	}
 
 
