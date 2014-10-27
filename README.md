@@ -7,7 +7,7 @@ AnnotateCms/Packages
 
 Requirements
 ------------
-- PHP 5.4
+- PHP 5.4+
 - [Nette Framework](https://github.com/nette/nette)
 - [annotatecms/extensions-installer](https://github.com/annotatecms/extensions-installer)
 - [annotatecms/diagnostics](https://github.com/annotatecms/diagnostics)
@@ -18,7 +18,7 @@ Installation
 Run:
 
 ```sh
-$ composer require annotatecms/packages:@dev
+$ composer require annotatecms/packages:~1.0
 ```
 
 Documentation

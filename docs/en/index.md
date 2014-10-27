@@ -4,6 +4,8 @@ Quickstart
 This extension provides support for loading css/js packages dynamically. You define a package and require this package in your presenter or component.
 Packages extension also manage dependencies of packages so you can load eg. jQueryUI package in your component and jQuery will be automatically loaded before jQueryUI.
 
+It also support loading of bower packages.
+
 Installation
 ------------
 
