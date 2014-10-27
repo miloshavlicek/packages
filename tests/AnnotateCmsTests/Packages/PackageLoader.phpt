@@ -70,7 +70,7 @@ class PackageLoaderTest extends TestCase
 		$packageLoader = $this->createPackageLoader();
 		$packageLoader->load();
 		Assert::true(array_key_exists('TwitterBootstrap', $packageLoader->getPackages()));
-		Assert::true(array_key_exists('jQuery', $packageLoader->getPackages()));
+		Assert::true(array_key_exists('jquery', $packageLoader->getPackages()));
 	}
 
 
@@ -162,7 +162,7 @@ class PackageLoaderTest extends TestCase
 	{
 		Assert::exception(
 			function () {
-				$this->createPackageLoader()->getPackage('jQuery', NULL, 'someVariant');
+				$this->createPackageLoader()->getPackage('jquery', NULL, 'someVariant');
 			},
 			'AnnotateCms\Packages\Exceptions\PackageVariantNotFoundException'
 		);
@@ -173,7 +173,7 @@ class PackageLoaderTest extends TestCase
 	{
 		Assert::exception(
 			function () {
-				$this->createPackageLoader()->getPackage('jQuery', 20.56, 'default');
+				$this->createPackageLoader()->getPackage('jquery', 20.56, 'default');
 			},
 			'AnnotateCms\Packages\Exceptions\BadPackageVersionException'
 		);
@@ -186,7 +186,7 @@ class PackageLoaderTest extends TestCase
 		$assetsLoader->expects('addScripts')->once();
 		$assetsLoader->expects('addStyles')->exactly(0);
 		$packageLoader = $this->createPackageLoader($assetsLoader);
-		$packageLoader->loadPackage('jQuery');
+		$packageLoader->loadPackage('jquery');
 	}
 
 
@@ -252,9 +252,26 @@ class PackageLoaderTest extends TestCase
 		$assetsLoader->expects('addScripts')->exactly(1);
 		$assetsLoader->expects('addStyles')->exactly(0);
 
-		$packageLoader->loadPackage('jQuery');
-		$packageLoader->loadPackage('jQuery');
+		$packageLoader->loadPackage('jquery');
+		$packageLoader->loadPackage('jquery');
 		$assetsLoader->assertExpectations();
+	}
+
+
+	public function testBowerPackageLoadedCorrectly()
+	{
+		$assetsLoader = $this->createAssetLoaderMock();
+		$packageLoader = $this->createPackageLoader($assetsLoader);
+
+		$assetsLoader->expects('addScripts')->exactly(2); // bower-package + jquery
+		$assetsLoader->expects('addStyles')->exactly(1);
+
+		$packageLoader->loadPackage('bower-package');
+
+		$package = $packageLoader->getPackage('bower-package');
+
+		Assert::equal(['@/css/styles.css'], $package->getVariants()['default']['styles']);
+		Assert::equal(['@/js/script.js'], $package->getVariants()['default']['scripts']);
 	}
 
 }

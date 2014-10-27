@@ -10,4 +10,4 @@ variants:
         styles:
             - @css/bootstrap-theme.min.css
 dependencies:
-    jQuery:
+    jquery:

@@ -133,14 +133,29 @@ class PackageLoader implements Subscriber
 
 			$files = is_array($data['main']) ? $data['main'] : [$data['main']];
 
-			array_walk($files, function (&$file) {
-				$file = '@' . $file;
-			});
+			$scripts = [];
+			$styles = [];
+
+			foreach ($files as $filename) {
+				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+				if ($ext === 'css') {
+					$styles[] = '@' . ltrim($filename, '.');
+				}
+				if ($ext === 'js') {
+					$scripts[] = '@' . ltrim($filename, '.');
+				}
+			};
 
 			$this->packages[$data['name']] = new Package(
 				$data['name'],
 				$data['version'],
-				['default' => ['scripts' => $files]],
+				[
+					'default' =>
+						[
+							'styles' => $styles,
+							'scripts' => $scripts,
+						],
+				],
 				$dependencies,
 				$aDir,
 				$rDir
