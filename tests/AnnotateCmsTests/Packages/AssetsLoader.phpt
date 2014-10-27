@@ -4,8 +4,6 @@ namespace AnnotateCmsTests\Packages;
 
 use AnnotateCms\Packages\Loaders\AssetsLoader;
 use AnnotateCms\Packages\Package;
-use AnnotateCms\Packages\ThemeAsset;
-use AnnotateCms\Themes\Theme;
 use Latte\Engine;
 use Nette\Bridges\ApplicationLatte\Template;
 use Tester;
@@ -13,7 +11,6 @@ use Tester\Assert;
 
 
 require_once __DIR__ . '/../bootstrap.php';
-
 
 
 class AssetsLoaderTest extends TestCase
@@ -82,43 +79,9 @@ class AssetsLoaderTest extends TestCase
 		Assert::equal(
 			[
 				'AnnotateCms\\Templating\\TemplateFactory::onSetupTemplate',
-				'AnnotateCms\\Themes\\Loaders\\ThemesLoader::onActivateTheme',
 			],
 			$this->assetsLoader->getSubscribedEvents()
 		);
-	}
-
-
-	public function testItAddsThemesFiles()
-	{
-		if (!class_exists('AnnotateCms\\Themes\\Theme')) {
-			Tester\Environment::skip('Test skipped because themes extension is not installed');
-
-			return;
-		}
-		$def = [
-			'name'         => 'TestTheme',
-			'version'      => 1.0,
-			'author'       => 'John Doe',
-			'scripts'      => [
-				'@script.js'
-			],
-			'styles'       => [
-				'@style.css'
-			],
-			'dependencies' => [],
-		];
-		$aDir = '/home/michal/www/cms/fakepath/themes/';
-		$theme = new Theme($def, $aDir);
-		$this->assetsLoader->onActivateTheme($theme);
-		$styles = $this->assetsLoader->getStyles();
-		$scripts = $this->assetsLoader->getScripts();
-
-		$cssAsset = new ThemeAsset($theme, '@style.css');
-		$jsAsset = new ThemeAsset($theme, '@script.js');
-
-		Assert::equal([$cssAsset], $styles);
-		Assert::equal([$jsAsset], $scripts);
 	}
 
 
@@ -131,7 +94,6 @@ class AssetsLoaderTest extends TestCase
 	}
 
 }
-
 
 
 \run(new AssetsLoaderTest);

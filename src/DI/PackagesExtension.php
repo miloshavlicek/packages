@@ -14,9 +14,9 @@ class PackagesExtension extends CompilerExtension
 
 	private $defaults = [
 		'directories' => [
-			'%wwwDir%/bower_components/',
+			'%appDir%/../www/bower_components/',
 		],
-		'rootDir' => '%wwwDir%'
+		'rootDir' => '%appDir%/../www'
 	];
 
 

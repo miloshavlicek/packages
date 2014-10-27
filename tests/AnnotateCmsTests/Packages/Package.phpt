@@ -10,7 +10,6 @@ use Tester\Assert;
 require_once __DIR__ . '/../bootstrap.php';
 
 
-
 class PackageTest extends TestCase
 {
 
@@ -34,7 +33,6 @@ class PackageTest extends TestCase
 	}
 
 }
-
 
 
 \run(new PackageTest);

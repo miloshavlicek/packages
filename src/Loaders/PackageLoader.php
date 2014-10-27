@@ -3,7 +3,6 @@
 namespace AnnotateCms\Packages\Loaders;
 
 use AnnotateCms\Diagnostics\CmsPanel;
-use AnnotateCms\Framework\Utils\Strings;
 use AnnotateCms\Packages\Asset;
 use AnnotateCms\Packages\Exceptions\BadPackageVersionException;
 use AnnotateCms\Packages\Exceptions\PackageNotFoundException;
@@ -14,6 +13,7 @@ use Kdyby\Events\Subscriber;
 use Nette\DI\Config\Adapters\NeonAdapter;
 use Nette\Utils\Finder;
 use Nette\Utils\Json;
+use Nette\Utils\Strings;
 use Tracy\Dumper;
 
 
@@ -31,7 +31,7 @@ class PackageLoader implements Subscriber
 	private $loadedPackages = [];
 
 	/** @var string[] */
-	private $directories;
+	private $directories = [];
 
 	/** @var string */
 	private $rootDir;
@@ -40,11 +40,10 @@ class PackageLoader implements Subscriber
 	public function __construct($directories, $rootDir, AssetsLoader $assetsLoader)
 	{
 		foreach ($directories as $key => $directory) {
-			if (!is_dir($directory)) {
-				unset($directories[$key]);
+			if (is_dir($directory)) {
+				$this->directories[] = $directory;
 			}
 		}
-		$this->directories = $directories;
 		$this->rootDir = realpath($rootDir);
 		$this->assetsLoader = $assetsLoader;
 		$this->load();
@@ -287,8 +286,9 @@ class PackageLoader implements Subscriber
 
 
 	/**
-	 * @param  string
+	 * @param          string
 	 * @param  Package $package
+	 *
 	 * @return void
 	 */
 	private function loadPackageAssets($packageVariant, Package $package)

@@ -12,7 +12,6 @@ use Tester\Assert;
 require_once __DIR__ . '/../bootstrap.php';
 
 
-
 class PackageLoaderTest extends TestCase
 {
 
@@ -31,9 +30,9 @@ class PackageLoaderTest extends TestCase
 	private function createPackageLoader($assetLoaderMock = NULL)
 	{
 		if ($assetLoaderMock) {
-			return new PackageLoader(ROOT_DIR . '/Packages/data/packages', ROOT_DIR, $assetLoaderMock);
+			return new PackageLoader([ROOT_DIR . '/Packages/data/packages'], ROOT_DIR, $assetLoaderMock);
 		} else {
-			return new PackageLoader(ROOT_DIR . '/Packages/data/packages', ROOT_DIR, $this->createAssetLoaderMock());
+			return new PackageLoader([ROOT_DIR . '/Packages/data/packages'], ROOT_DIR, $this->createAssetLoaderMock());
 		}
 	}
 
@@ -60,7 +59,7 @@ class PackageLoaderTest extends TestCase
 				$this->createPackageLoader()->getPackage('Test');
 			},
 			'AnnotateCms\Packages\Exceptions\PackageNotFoundException',
-			"Package 'Test' does not exist"
+			'Package "Test" does not exist'
 		);
 
 	}
@@ -86,13 +85,13 @@ class PackageLoaderTest extends TestCase
 		$packageLoader = $this->createPackageLoader($assetsLoader);
 
 		$def = [
-			'name'         => 'TestTheme',
-			'version'      => 1.0,
-			'author'       => 'John Doe',
-			'scripts'      => [
+			'name' => 'TestTheme',
+			'version' => 1.0,
+			'author' => 'John Doe',
+			'scripts' => [
 				'@script.js'
 			],
-			'styles'       => [
+			'styles' => [
 				'@style.css'
 			],
 			'dependencies' => [
@@ -100,7 +99,7 @@ class PackageLoaderTest extends TestCase
 			],
 		];
 		$aDir = '/home/michal/www/cms/fakepath/themes/';
-		$theme = new Theme($def, $aDir);
+		$theme = new Theme($def, $aDir, '/fakepath/themes/');
 		$packageLoader->onActivateTheme($theme);
 		Assert::true($theme->isChecked());
 	}
@@ -123,13 +122,13 @@ class PackageLoaderTest extends TestCase
 		Assert::exception(
 			function () {
 				$def = [
-					'name'         => 'TestTheme',
-					'version'      => 1.0,
-					'author'       => 'John Doe',
-					'scripts'      => [
+					'name' => 'TestTheme',
+					'version' => 1.0,
+					'author' => 'John Doe',
+					'scripts' => [
 						'@script.js'
 					],
-					'styles'       => [
+					'styles' => [
 						'@style.css'
 					],
 					'dependencies' => [
@@ -139,11 +138,11 @@ class PackageLoaderTest extends TestCase
 					],
 				];
 				$aDir = '/home/michal/www/cms/fakepath/themes/';
-				$theme = new Theme($def, $aDir);
+				$theme = new Theme($def, $aDir, '/fakepath/themes/');
 				$this->createPackageLoader()->onActivateTheme($theme);
 			},
 			'AnnotateCms\Packages\Exceptions\BadPackageVersionException',
-			'Theme cannot be loaded. Theme requires \'TwitterBootstrap\' version \'4.0\''
+			'Theme cannot be loaded. Theme requires "TwitterBootstrap" version "4.0"'
 		);
 	}
 
@@ -195,13 +194,13 @@ class PackageLoaderTest extends TestCase
 	{
 		$this->markAsSkippedIfThemesExtensionMissing();
 		$def = [
-			'name'         => 'TestTheme',
-			'version'      => 1.0,
-			'author'       => 'John Doe',
-			'scripts'      => [
+			'name' => 'TestTheme',
+			'version' => 1.0,
+			'author' => 'John Doe',
+			'scripts' => [
 				'@script.js'
 			],
-			'styles'       => [
+			'styles' => [
 				'@style.css'
 			],
 			'dependencies' => [
@@ -209,7 +208,7 @@ class PackageLoaderTest extends TestCase
 			],
 		];
 		$aDir = '/home/michal/www/cms/fakepath/themes/';
-		$theme = new Theme($def, $aDir);
+		$theme = new Theme($def, $aDir, '/fakepath/themes/');
 		$theme->setChecked();
 		$assetsLoader = $this->createAssetLoaderMock();
 		$assetsLoader->expects('addScripts')->exactly(0);
@@ -223,19 +222,19 @@ class PackageLoaderTest extends TestCase
 	{
 		$this->markAsSkippedIfThemesExtensionMissing();
 		$def = [
-			'name'         => 'TestTheme',
-			'version'      => 1.0,
-			'author'       => 'John Doe',
-			'scripts'      => [
+			'name' => 'TestTheme',
+			'version' => 1.0,
+			'author' => 'John Doe',
+			'scripts' => [
 				'@script.js'
 			],
-			'styles'       => [
+			'styles' => [
 				'@style.css'
 			],
 			'dependencies' => [],
 		];
 		$aDir = '/home/michal/www/cms/fakepath/themes/';
-		$theme = new Theme($def, $aDir);
+		$theme = new Theme($def, $aDir, '/fakepath/themes/');
 		$assetsLoader = $this->createAssetLoaderMock();
 		$assetsLoader->expects('addScripts')->exactly(0);
 		$assetsLoader->expects('addStyles')->exactly(0);
@@ -259,7 +258,6 @@ class PackageLoaderTest extends TestCase
 	}
 
 }
-
 
 
 \run(new PackageLoaderTest);
