@@ -41,7 +41,7 @@ class PackageLoader implements Subscriber
 	{
 		foreach ($directories as $key => $directory) {
 			if (is_dir($directory)) {
-				$this->directories[] = $directory;
+				$this->directories[] = realpath($directory);
 			}
 		}
 		$this->rootDir = realpath($rootDir);
