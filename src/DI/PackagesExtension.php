@@ -3,6 +3,7 @@
 namespace AnnotateCms\Packages\DI;
 
 
+use AnnotateCms\Packages\Latte\Macros;
 use AnnotateCms\Packages\Loaders\AssetsLoader;
 use AnnotateCms\Packages\Loaders\PackageLoader;
 use Kdyby\Events\DI\EventsExtension;
@@ -35,6 +36,9 @@ class PackagesExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('assetsLoader'))
 			->setClass(AssetsLoader::CLASSNAME)
 			->addTag(EventsExtension::TAG_SUBSCRIBER);
+
+		$latteFactory = $builder->getDefinition('nette.latteFactory');
+		$latteFactory->addSetup('?->onCompile[] = function($engine) { ' . Macros::CLASSNAME . '::install($engine->getCompiler()); }', ['@self']);
 	}
 
 }

@@ -4,11 +4,13 @@ namespace AnnotateCms\Packages\Loaders;
 
 
 use AnnotateCms\Packages\Package;
+use AnnotateCms\Packages\PlainAsset;
 use Kdyby\Events\Subscriber;
 use Nette\Bridges\ApplicationLatte\Template;
+use Nette\Object;
 
 
-class AssetsLoader implements Subscriber
+class AssetsLoader extends Object implements Subscriber
 {
 
 	const CLASSNAME = __CLASS__;
@@ -65,10 +67,25 @@ class AssetsLoader implements Subscriber
 	}
 
 
+	public function addAsset($asset)
+	{
+		$ext = pathinfo($asset, PATHINFO_EXTENSION);
+		$asset = new PlainAsset($asset);
+
+		switch ($ext) {
+			case 'css':
+				$this->styles[] = $asset;
+				break;
+			case 'js':
+				$this->scripts[] = $asset;
+				break;
+		}
+	}
+
+
 	public function onSetupTemplate(Template $template)
 	{
-		$template->styles = $this->styles;
-		$template->scripts = $this->scripts;
+		$template->assets = $this;
 	}
 
 }
