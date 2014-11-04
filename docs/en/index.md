@@ -115,4 +115,4 @@ Next steps
 ----------
 
 - [define package](define_package.md)
-- [require package](require_package.md) [TODO]
+- [require package](require_package.md)
