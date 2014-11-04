@@ -9,25 +9,22 @@
             "email": "vysinsky@live.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4",
-        "annotatecms/extensions-installer": "@dev",
-        "annotatecms/diagnostics": "@dev",
-        "annotatecms/events": "@dev",
-        "latte/latte": "@dev",
-        "nette/http": "@dev",
-        "nette/security": "@dev",
-        "nette/application": "@dev",
-        "nette/safe-stream": "@dev"
+        "annotatecms/extensions-installer": "~1.0.0",
+        "annotatecms/diagnostics": "~1.0.0",
+        "annotatecms/events": "~1.0.0",
+        "latte/latte": "~2.2.0",
+        "nette/bootstrap": "~2.2.0",
+        "nette/http": "~2.2.0",
+        "nette/security": "~2.2.0",
+        "nette/application": "~2.2.0",
+        "nette/safe-stream": "~2.2.0",
+        "nette/mail": "~2.2.0"
     },
     "require-dev": {
         "nette/tester": "@dev",
-        "janmarek/mockista": "@dev",
-        "annotatecms/themes": "@dev"
-    },
-    "suggest": {
-        "annotatecms/themes": "Reveal full power of packages with themes package"
+        "janmarek/mockista": "@dev"
     },
     "autoload": {
         "psr-4": {

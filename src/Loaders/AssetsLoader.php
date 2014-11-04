@@ -85,7 +85,7 @@ class AssetsLoader extends Object implements Subscriber
 
 	public function onSetupTemplate(Template $template)
 	{
-		$template->assets = $this;
+		$template->assetsLoader = $this;
 	}
 
 }

@@ -37,8 +37,20 @@ class PackagesExtension extends CompilerExtension
 			->setClass(AssetsLoader::CLASSNAME)
 			->addTag(EventsExtension::TAG_SUBSCRIBER);
 
-		$latteFactory = $builder->getDefinition('nette.latteFactory');
+		$latteFactory = $this->getLatteFactory();
 		$latteFactory->addSetup('?->onCompile[] = function($engine) { ' . Macros::CLASSNAME . '::install($engine->getCompiler()); }', ['@self']);
+	}
+
+
+	/**
+	 * @return ServiceDefinition
+	 */
+	private function getLatteFactory()
+	{
+		$builder = $this->getContainerBuilder();
+		return $builder->hasDefinition('nette.latteFactory')
+			? $builder->getDefinition('nette.latteFactory')
+			: $builder->getDefinition('nette.latte');
 	}
 
 }

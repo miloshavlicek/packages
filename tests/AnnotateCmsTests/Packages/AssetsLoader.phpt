@@ -89,8 +89,8 @@ class AssetsLoaderTest extends TestCase
 	{
 		$template = new Template(new Engine);
 		$this->assetsLoader->onSetupTemplate($template);
-		Assert::equal([], $template->styles);
-		Assert::equal([], $template->scripts);
+		Assert::equal([], $template->assetsLoader->styles);
+		Assert::equal([], $template->assetsLoader->scripts);
 	}
 
 }
