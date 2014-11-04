@@ -101,6 +101,16 @@ class Presenter extends Nette\Application\UI\Presenter {
 
 When you check your page in browser jQueryUI assets will be loaded after jQuery assets.
 
+Require asset from template
+---------------------------
+From version 1.0.1 you can add assets to AssetLoader directly in template. You are provided by ˙asset` macro:
+
+```latte
+{asset /css/style.css}
+```
+
+Note: assets are loaded relatively to your `$basePath`.
+
 Next steps
 ----------
 
