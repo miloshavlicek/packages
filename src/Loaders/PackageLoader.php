@@ -36,6 +36,8 @@ class PackageLoader implements Subscriber
 	/** @var string */
 	private $rootDir;
 
+	private $loading = [];
+
 
 	public function __construct($directories, $rootDir, AssetsLoader $assetsLoader)
 	{
@@ -124,14 +126,18 @@ class PackageLoader implements Subscriber
 
 	private function processJson()
 	{
-		foreach (Finder::findFiles('bower.json')->from($this->directories) as $path => $file) {
+		foreach (Finder::findFiles(['bower.json', '.bower.json'])->from($this->directories) as $path => $file) {
 			$data = Json::decode(file_get_contents($path), Json::FORCE_ARRAY);
 
 			$aDir = dirname($path);
 			$rDir = str_replace($this->rootDir, NULL, $aDir);
 			$dependencies = isset($data['dependencies']) ? $data['dependencies'] : NULL;
 
-			$files = is_array($data['main']) ? $data['main'] : [$data['main']];
+			if (isset($data['main'])) {
+				$files = is_array($data['main']) ? $data['main'] : [$data['main']];
+			} else {
+				$files = [];
+			}
 
 			$scripts = [];
 			$styles = [];
@@ -146,20 +152,22 @@ class PackageLoader implements Subscriber
 				}
 			};
 
-			$this->packages[$data['name']] = new Package(
-				$data['name'],
-				$data['version'],
-				[
-					'default' =>
-						[
-							'styles' => $styles,
-							'scripts' => $scripts,
-						],
-				],
-				$dependencies,
-				$aDir,
-				$rDir
-			);
+			if (!isset($this->packages[$data['name']])) {
+				$this->packages[$data['name']] = new Package(
+					$data['name'],
+					$data['version'],
+					[
+						'default' =>
+							[
+								'styles' => $styles,
+								'scripts' => $scripts,
+							],
+					],
+					$dependencies,
+					$aDir,
+					$rDir
+				);
+			}
 		}
 	}
 
@@ -185,6 +193,13 @@ class PackageLoader implements Subscriber
 	}
 
 
+	public function addDirectory($directory)
+	{
+		$this->directories[] = $directory;
+		return $this;
+	}
+
+
 	public function getSubscribedEvents()
 	{
 		return [
@@ -205,7 +220,11 @@ class PackageLoader implements Subscriber
 
 		foreach ($theme->getDependencies() as $name => $info) {
 			if (!is_array($info)) {
-				$version = $info;
+				if (strpos($info, '#') !== FALSE) {
+					$version = explode('#', $info)[1];
+				} else {
+					$version = $info;
+				}
 				$variant = 'default';
 			} else {
 				$version = isset($info['version']) ? $info['version'] : NULL;
@@ -231,17 +250,24 @@ class PackageLoader implements Subscriber
 		if ($package->isLoaded()) {
 			return;
 		}
+		$this->loading[$name] = TRUE;
 		if ($package->getDependencies()) {
 			if (!$package->isChecked()) {
 				foreach ($package->getDependencies() as $dep_name => $info) {
 					if (!is_array($info)) {
-						$dep_version = $info;
+						if (strpos($info, '#') !== FALSE) {
+							$dep_version = explode('#', $info)[1];
+						} else {
+							$dep_version = $info;
+						}
 						$variant = 'default';
 					} else {
 						$dep_version = isset($info['version']) ? $info['version'] : NULL;
 						$variant = isset($info['variant']) ? $info['variant'] : 'default';
 					}
-					$this->loadPackage($dep_name, $dep_version, $variant);
+					if (!isset($this->loading[$dep_name])) {
+						$this->loadPackage($dep_name, $dep_version, $variant);
+					}
 				}
 				$package->setChecked();
 			}
@@ -257,6 +283,7 @@ class PackageLoader implements Subscriber
 			'dependencies' => $package->getDependencies()
 		];
 
+		unset($this->loading[$name]);
 		$package->setLoaded();
 	}
 
@@ -286,6 +313,7 @@ class PackageLoader implements Subscriber
 
 		if ($version) {
 			$version = str_replace('~', NULL, $version);
+			$version = str_replace('^', '>=', $version);
 			$matches = Strings::match($version, '~(lt|<>|<=|le|>=|<|>|gt|ge|==|=|eq|!=|ne)*\s?(.+)~i');
 
 			$versionNumber = $matches[2];
