@@ -126,7 +126,7 @@ class PackageLoader implements Subscriber
 
 	private function processJson()
 	{
-		foreach (Finder::findFiles(['bower.json', '.bower.json'])->from($this->directories) as $path => $file) {
+		foreach (Finder::findFiles('.bower.json')->from($this->directories) as $path => $file) {
 			$data = Json::decode(file_get_contents($path), Json::FORCE_ARRAY);
 
 			$aDir = dirname($path);
