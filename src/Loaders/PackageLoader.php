@@ -74,7 +74,7 @@ class PackageLoader implements Subscriber
 			$aDir = dirname($path);
 			$rDir = str_replace($this->rootDir, NULL, $aDir);
 			$dependencies = isset($neon['dependencies']) ? $neon['dependencies'] : NULL;
-			$this->packages[$neon['name']] = new Package(
+			$this->packages[strtolower($neon['name'])] = new Package(
 				$neon['name'],
 				$neon['version'],
 				$neon['variants'],
@@ -126,7 +126,7 @@ class PackageLoader implements Subscriber
 
 	private function processJson()
 	{
-		foreach (Finder::findFiles('.bower.json')->from($this->directories) as $path => $file) {
+		foreach (Finder::findFiles(['.bower.json', 'bower.json'])->from($this->directories) as $path => $file) {
 			$data = Json::decode(file_get_contents($path), Json::FORCE_ARRAY);
 
 			$aDir = dirname($path);
@@ -152,8 +152,8 @@ class PackageLoader implements Subscriber
 				}
 			};
 
-			if (!isset($this->packages[$data['name']])) {
-				$this->packages[$data['name']] = new Package(
+			if (!isset($this->packages[strtolower($data['name'])])) {
+				$this->packages[strtolower($data['name'])] = new Package(
 					$data['name'],
 					$data['version'],
 					[
@@ -245,6 +245,7 @@ class PackageLoader implements Subscriber
 
 	public function loadPackage($name, $version = NULL, $packageVariant = 'default')
 	{
+		$name = strtolower($name);
 		/** @var Package $package */
 		$package = $this->getPackage($name, $version, $packageVariant);
 		if ($package->isLoaded()) {
@@ -300,6 +301,7 @@ class PackageLoader implements Subscriber
 	 */
 	public function getPackage($name, $version = NULL, $variant = 'default')
 	{
+		$name = strtolower($name);
 		if (!isset($this->packages[$name])) {
 			throw new PackageNotFoundException('Package "' . $name . '" does not exist');
 		}

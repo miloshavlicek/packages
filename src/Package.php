@@ -25,7 +25,7 @@ class Package
 
 	public function __construct($name, $version, $variants, $dependencies, $aDir, $rDir)
 	{
-		$this->name = $name;
+		$this->name = strtolower($name);
 		$this->version = $version;
 		$this->variants = $variants;
 		$this->dependencies = $dependencies;
