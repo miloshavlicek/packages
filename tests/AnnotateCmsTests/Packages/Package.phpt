@@ -22,14 +22,14 @@ class PackageTest extends TestCase
 	public function testPackageReturnsItsName()
 	{
 		$package = new Package('Test', '3.0', [], [], 'aDir', 'rDir');
-		Assert::same('Test', $package->getName());
+		Assert::same('test', $package->getName());
 	}
 
 
 	public function testPackageReturnsItsNameAndVersion()
 	{
 		$package = new Package('Test', '3.0', [], [], 'aDir', 'rDir');
-		Assert::same('Test 3.0', (string)$package);
+		Assert::same('test 3.0', (string)$package);
 	}
 
 }

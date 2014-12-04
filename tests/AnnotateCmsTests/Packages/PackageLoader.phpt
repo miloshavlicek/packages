@@ -59,7 +59,7 @@ class PackageLoaderTest extends TestCase
 				$this->createPackageLoader()->getPackage('Test');
 			},
 			'AnnotateCms\Packages\Exceptions\PackageNotFoundException',
-			'Package "Test" does not exist'
+			'Package "test" does not exist'
 		);
 
 	}
@@ -69,7 +69,7 @@ class PackageLoaderTest extends TestCase
 	{
 		$packageLoader = $this->createPackageLoader();
 		$packageLoader->load();
-		Assert::true(array_key_exists('TwitterBootstrap', $packageLoader->getPackages()));
+		Assert::true(array_key_exists('twitterbootstrap', $packageLoader->getPackages()));
 		Assert::true(array_key_exists('jquery', $packageLoader->getPackages()));
 	}
 
