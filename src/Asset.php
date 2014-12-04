@@ -24,4 +24,10 @@ class Asset implements IAsset
 		return str_replace('@', $basePath . $this->package->getRelativePath(), $this->fileName);
 	}
 
+
+	public function getAbsolutePath()
+	{
+		return $_SERVER['DOCUMENT_ROOT'] . $this->getRelativePath(NULL);
+	}
+
 }
