@@ -126,48 +126,68 @@ class PackageLoader implements Subscriber
 
 	private function processJson()
 	{
+		$dotBower = [];
+		$bower = [];
 		foreach (Finder::findFiles(['.bower.json', 'bower.json'])->from($this->directories) as $path => $file) {
-			$data = Json::decode(file_get_contents($path), Json::FORCE_ARRAY);
-
-			$aDir = dirname($path);
-			$rDir = str_replace($this->rootDir, NULL, $aDir);
-			$dependencies = isset($data['dependencies']) ? $data['dependencies'] : NULL;
-
-			if (isset($data['main'])) {
-				$files = is_array($data['main']) ? $data['main'] : [$data['main']];
+			if (pathinfo($file, PATHINFO_BASENAME) === '.bower.json') {
+				$dotBower[$path] = $file;
 			} else {
-				$files = [];
+				$bower[$path] = $file;
 			}
+		}
 
-			$scripts = [];
-			$styles = [];
+		foreach ($dotBower as $path => $file) {
+			$this->processBowerFile($path);
+		}
 
-			foreach ($files as $filename) {
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
-				if ($ext === 'css') {
-					$styles[] = '@' . ltrim($filename, '.');
-				}
-				if ($ext === 'js') {
-					$scripts[] = '@' . ltrim($filename, '.');
-				}
-			};
+		foreach ($bower as $path => $file) {
+			$this->processBowerFile($path);
+		}
+	}
 
-			if (!isset($this->packages[strtolower($data['name'])])) {
-				$this->packages[strtolower($data['name'])] = new Package(
-					$data['name'],
-					$data['version'],
-					[
-						'default' =>
-							[
-								'styles' => $styles,
-								'scripts' => $scripts,
-							],
-					],
-					$dependencies,
-					$aDir,
-					$rDir
-				);
+
+	private function processBowerFile($path)
+	{
+		$data = Json::decode(file_get_contents($path), Json::FORCE_ARRAY);
+
+		$aDir = dirname($path);
+		$rDir = str_replace($this->rootDir, NULL, $aDir);
+		$dependencies = isset($data['dependencies']) ? $data['dependencies'] : NULL;
+
+		if (isset($data['main'])) {
+			$files = is_array($data['main']) ? $data['main'] : [$data['main']];
+		} else {
+			$files = [];
+		}
+
+		$scripts = [];
+		$styles = [];
+
+		foreach ($files as $filename) {
+			$ext = pathinfo($filename, PATHINFO_EXTENSION);
+			if ($ext === 'css') {
+				$styles[] = '@' . ltrim($filename, '.');
 			}
+			if ($ext === 'js') {
+				$scripts[] = '@' . ltrim($filename, '.');
+			}
+		};
+
+		if (!isset($this->packages[strtolower($data['name'])])) {
+			$this->packages[strtolower($data['name'])] = new Package(
+				$data['name'],
+				$data['version'],
+				[
+					'default' =>
+						[
+							'styles' => $styles,
+							'scripts' => $scripts,
+						],
+				],
+				$dependencies,
+				$aDir,
+				$rDir
+			);
 		}
 	}
 
