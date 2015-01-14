@@ -1,8 +1,8 @@
 <?php
 
-namespace AnnotateCmsTests\Packages;
+namespace AnnotateTests\Packages;
 
-use AnnotateCms\Packages\Package;
+use Annotate\Packages\Package;
 use Tester;
 use Tester\Assert;
 
@@ -19,6 +19,7 @@ class PackageTest extends TestCase
 	}
 
 
+
 	public function testPackageReturnsItsName()
 	{
 		$package = new Package('Test', '3.0', [], [], 'aDir', 'rDir');
@@ -26,10 +27,11 @@ class PackageTest extends TestCase
 	}
 
 
+
 	public function testPackageReturnsItsNameAndVersion()
 	{
 		$package = new Package('Test', '3.0', [], [], 'aDir', 'rDir');
-		Assert::same('test 3.0', (string)$package);
+		Assert::same('test 3.0', (string) $package);
 	}
 
 }

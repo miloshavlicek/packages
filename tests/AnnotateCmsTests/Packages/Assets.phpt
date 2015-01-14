@@ -1,9 +1,9 @@
 <?php
 
-namespace AnnotateCmsTests\Packages;
+namespace AnnotateTests\Packages;
 
-use AnnotateCms\Packages\Asset;
-use AnnotateCms\Packages\Package;
+use Annotate\Packages\Asset;
+use Annotate\Packages\Package;
 use Tester;
 use Tester\Assert;
 

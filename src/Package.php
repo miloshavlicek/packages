@@ -1,6 +1,6 @@
 <?php
 
-namespace AnnotateCms\Packages;
+namespace Annotate\Packages;
 
 
 class Package
@@ -23,6 +23,7 @@ class Package
 	private $dependencies = [];
 
 
+
 	public function __construct($name, $version, $variants, $dependencies, $aDir, $rDir)
 	{
 		$this->name = strtolower($name);
@@ -34,10 +35,12 @@ class Package
 	}
 
 
+
 	public function isLoaded()
 	{
 		return $this->loaded;
 	}
+
 
 
 	public function setLoaded()
@@ -46,10 +49,12 @@ class Package
 	}
 
 
+
 	public function isChecked()
 	{
 		return $this->checked;
 	}
+
 
 
 	public function setChecked()
@@ -58,10 +63,12 @@ class Package
 	}
 
 
+
 	public function getName()
 	{
 		return $this->name;
 	}
+
 
 
 	public function getVersion()
@@ -70,10 +77,12 @@ class Package
 	}
 
 
+
 	public function getVariants()
 	{
 		return $this->variants;
 	}
+
 
 
 	public function getDependencies()
@@ -82,10 +91,12 @@ class Package
 	}
 
 
+
 	public function getRelativePath()
 	{
 		return str_replace('\\', '/', $this->rDir) . '/';
 	}
+
 
 
 	public function hasVariant($name)
@@ -96,6 +107,7 @@ class Package
 
 		return FALSE;
 	}
+
 
 
 	public function __toString()

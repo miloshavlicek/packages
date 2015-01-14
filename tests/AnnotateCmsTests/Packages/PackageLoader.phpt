@@ -1,10 +1,10 @@
 <?php
 
-namespace AnnotateCmsTests\Packages;
+namespace AnnotateTests\Packages;
 
-use AnnotateCms\Packages\Loaders\AssetsLoader;
-use AnnotateCms\Packages\Loaders\PackageLoader;
-use AnnotateCms\Themes\Theme;
+use Annotate\Packages\Loaders\AssetsLoader;
+use Annotate\Packages\Loaders\PackageLoader;
+use Annotate\Themes\Theme;
 use Tester;
 use Tester\Assert;
 
@@ -20,11 +20,12 @@ class PackageLoaderTest extends TestCase
 	{
 		Assert::equal(
 			[
-				'AnnotateCms\\Themes\\Loaders\\ThemesLoader::onActivateTheme'
+				'Annotate\\Themes\\Loaders\\ThemesLoader::onActivateTheme'
 			],
 			$this->createPackageLoader()->getSubscribedEvents()
 		);
 	}
+
 
 
 	private function createPackageLoader($assetLoaderMock = NULL)
@@ -37,19 +38,22 @@ class PackageLoaderTest extends TestCase
 	}
 
 
+
 	/**
 	 * @return \Mockista\MockInterface|AssetsLoader
 	 */
 	private function createAssetLoaderMock()
 	{
-		return $this->mockista->create('AnnotateCms\Packages\Loaders\AssetsLoader');
+		return $this->mockista->create('Annotate\Packages\Loaders\AssetsLoader');
 	}
+
 
 
 	public function testTwitterBootstrapPackageCanBeFound()
 	{
-		Assert::type('AnnotateCms\Packages\Package', $this->createPackageLoader()->getPackage('TwitterBootstrap'));
+		Assert::type('Annotate\Packages\Package', $this->createPackageLoader()->getPackage('TwitterBootstrap'));
 	}
+
 
 
 	public function testTestPackageCannotBeFound()
@@ -58,11 +62,12 @@ class PackageLoaderTest extends TestCase
 			function () {
 				$this->createPackageLoader()->getPackage('Test');
 			},
-			'AnnotateCms\Packages\Exceptions\PackageNotFoundException',
+			'Annotate\Packages\Exceptions\PackageNotFoundException',
 			'Package "test" does not exist'
 		);
 
 	}
+
 
 
 	public function testLoadIsFunctional()
@@ -72,6 +77,7 @@ class PackageLoaderTest extends TestCase
 		Assert::true(array_key_exists('twitterbootstrap', $packageLoader->getPackages()));
 		Assert::true(array_key_exists('jquery', $packageLoader->getPackages()));
 	}
+
 
 
 	public function testItLoadsDependenciesOnActivatedTheme()
@@ -105,14 +111,16 @@ class PackageLoaderTest extends TestCase
 	}
 
 
+
 	private function markAsSkippedIfThemesExtensionMissing()
 	{
-		if (!class_exists('AnnotateCms\\Themes\\Theme')) {
+		if (!class_exists('Annotate\\Themes\\Theme')) {
 			Tester\Environment::skip('Test skipped because themes extension is not installed');
 
 			return;
 		}
 	}
+
 
 
 	public function testItThrowsExceptionOnWrongVersion()
@@ -141,10 +149,11 @@ class PackageLoaderTest extends TestCase
 				$theme = new Theme($def, $aDir, '/fakepath/themes/');
 				$this->createPackageLoader()->onActivateTheme($theme);
 			},
-			'AnnotateCms\Packages\Exceptions\BadPackageVersionException',
+			'Annotate\Packages\Exceptions\BadPackageVersionException',
 			'Theme cannot be loaded. Theme requires "TwitterBootstrap" version "4.0"'
 		);
 	}
+
 
 
 	public function testGetPackageThrowsExceptionOnUnknownPackage()
@@ -153,9 +162,10 @@ class PackageLoaderTest extends TestCase
 			function () {
 				$this->createPackageLoader()->getPackage('Test', '2.0');
 			},
-			'AnnotateCms\Packages\Exceptions\PackageNotFoundException'
+			'Annotate\Packages\Exceptions\PackageNotFoundException'
 		);
 	}
+
 
 
 	public function testGetPackageThrowsExceptionOnUnknownVariant()
@@ -164,9 +174,10 @@ class PackageLoaderTest extends TestCase
 			function () {
 				$this->createPackageLoader()->getPackage('jquery', NULL, 'someVariant');
 			},
-			'AnnotateCms\Packages\Exceptions\PackageVariantNotFoundException'
+			'Annotate\Packages\Exceptions\PackageVariantNotFoundException'
 		);
 	}
+
 
 
 	public function testGetPackageThrownExceptionOnBadVersion()
@@ -175,9 +186,10 @@ class PackageLoaderTest extends TestCase
 			function () {
 				$this->createPackageLoader()->getPackage('jquery', 20.56, 'default');
 			},
-			'AnnotateCms\Packages\Exceptions\BadPackageVersionException'
+			'Annotate\Packages\Exceptions\BadPackageVersionException'
 		);
 	}
+
 
 
 	public function testLoadPackageLoadsPackageAssets()
@@ -188,6 +200,7 @@ class PackageLoaderTest extends TestCase
 		$packageLoader = $this->createPackageLoader($assetsLoader);
 		$packageLoader->loadPackage('jquery');
 	}
+
 
 
 	public function testItSkipsCheckedTheme()
@@ -218,6 +231,7 @@ class PackageLoaderTest extends TestCase
 	}
 
 
+
 	public function testItSkipsLoadingIfThemeHasNotAnyDependencies()
 	{
 		$this->markAsSkippedIfThemesExtensionMissing();
@@ -243,6 +257,7 @@ class PackageLoaderTest extends TestCase
 	}
 
 
+
 	public function testItSkipsLoadedPackage()
 	{
 		$assetsLoader = $this->createAssetLoaderMock();
@@ -256,6 +271,7 @@ class PackageLoaderTest extends TestCase
 		$packageLoader->loadPackage('jquery');
 		$assetsLoader->assertExpectations();
 	}
+
 
 
 	public function testBowerPackageLoadedCorrectly()

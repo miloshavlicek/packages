@@ -1,9 +1,9 @@
 <?php
 
-namespace AnnotateCmsTests\Packages;
+namespace AnnotateTests\Packages;
 
-use AnnotateCms\Packages\Loaders\AssetsLoader;
-use AnnotateCms\Packages\Loaders\PackageLoader;
+use Annotate\Packages\Loaders\AssetsLoader;
+use Annotate\Packages\Loaders\PackageLoader;
 use Nette;
 use Tester;
 use Tester\Assert;
@@ -22,6 +22,7 @@ class ExtensionTest extends TestCase
 		Assert::true($container->getService('packages.packageLoader') instanceof PackageLoader);
 		Assert::true($container->getService('packages.assetsLoader') instanceof AssetsLoader);
 	}
+
 
 
 	private function createContainer()

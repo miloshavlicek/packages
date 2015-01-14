@@ -12,15 +12,15 @@ Installation
 Require this extension by [Composer](http://getcomposer.org)
 
 ```sh
-$ composer require annotatecms/packages:@dev
+$ composer require annotate/packages:@dev
 ```
 
-If you have correct configuration for [annotatecms/extensions-installer](https://github.com/annotatecms/extensions-installer) extension will be registered
+If you have correct configuration for [annotate/extensions-installer](https://github.com/AnnotateFramework/extensions-installer) extension will be registered
 automatically. If not, just register extension into configuration:
 
 ```yml
 extensions:
-    packages: AnnotateCms\Packages\DI\PackagesExtension
+    packages: Annotate\Packages\DI\PackagesExtension
 ```
 
 Configuration
@@ -72,8 +72,8 @@ Edit your presenter:
 
 ```php
 
-use AnnotateCms\Packages\Loaders\AssetsLoader;
-use AnnotateCms\Packages\Loaders\PackageLoader;
+use Annotate\Packages\Loaders\AssetsLoader;
+use Annotate\Packages\Loaders\PackageLoader;
 
 class Presenter extends Nette\Application\UI\Presenter {
 

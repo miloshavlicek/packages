@@ -1,6 +1,6 @@
 <?php
 
-namespace AnnotateCms\Packages;
+namespace Annotate\Packages;
 
 
 class Asset implements IAsset
@@ -12,6 +12,7 @@ class Asset implements IAsset
 	private $fileName;
 
 
+
 	public function __construct(Package $package, $fileName)
 	{
 		$this->package = $package;
@@ -19,15 +20,17 @@ class Asset implements IAsset
 	}
 
 
-	public function getRelativePath($basePath)
-	{
-		return str_replace('@', $basePath . $this->package->getRelativePath(), $this->fileName);
-	}
-
 
 	public function getAbsolutePath()
 	{
 		return $_SERVER['DOCUMENT_ROOT'] . $this->getRelativePath(NULL);
+	}
+
+
+
+	public function getRelativePath($basePath)
+	{
+		return str_replace('@', $basePath . $this->package->getRelativePath(), $this->fileName);
 	}
 
 }

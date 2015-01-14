@@ -1,9 +1,9 @@
 <?php
 
-namespace AnnotateCmsTests\Packages;
+namespace AnnotateTests\Packages;
 
-use AnnotateCms\Packages\Loaders\AssetsLoader;
-use AnnotateCms\Packages\Package;
+use Annotate\Packages\Loaders\AssetsLoader;
+use Annotate\Packages\Package;
 use Latte\Engine;
 use Nette\Bridges\ApplicationLatte\Template;
 use Tester;
@@ -20,16 +20,19 @@ class AssetsLoaderTest extends TestCase
 	private $assetsLoader;
 
 
+
 	public function setUp()
 	{
 		$this->assetsLoader = new AssetsLoader();
 	}
 
 
+
 	public function testItImplementsSubscriber()
 	{
 		Assert::true($this->assetsLoader instanceof \Kdyby\Events\Subscriber);
 	}
+
 
 
 	public function testAddPackageAppendsPackages()
@@ -40,6 +43,7 @@ class AssetsLoaderTest extends TestCase
 		Assert::equal(1, count($this->assetsLoader->getPackages()));
 		Assert::true(in_array($package, $this->assetsLoader->getPackages()));
 	}
+
 
 
 	public function testAddStylesMergeAddedWithExistingArray()
@@ -58,6 +62,7 @@ class AssetsLoaderTest extends TestCase
 	}
 
 
+
 	public function testAddScriptsMergeAddedWithExistingArray()
 	{
 		Assert::equal([], $this->assetsLoader->getScripts());
@@ -74,15 +79,17 @@ class AssetsLoaderTest extends TestCase
 	}
 
 
+
 	public function testItListensGoodEvents()
 	{
 		Assert::equal(
 			[
-				'AnnotateCms\\Templating\\TemplateFactory::onSetupTemplate',
+				'Annotate\\Templating\\TemplateFactory::onSetupTemplate',
 			],
 			$this->assetsLoader->getSubscribedEvents()
 		);
 	}
+
 
 
 	public function testItAddsTemplateVariablesOnSetupTemplate()

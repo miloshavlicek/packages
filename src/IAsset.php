@@ -1,6 +1,6 @@
 <?php
 
-namespace AnnotateCms\Packages;
+namespace Annotate\Packages;
 
 interface IAsset
 {

@@ -1,38 +1,38 @@
 {
-    "name": "annotatecms/packages",
-    "type": "annotatecms-extension",
-    "description": "Package management extension for AnnotateCms framework",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Michal Vyšinský",
-            "email": "vysinsky@live.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.4",
-        "annotatecms/extensions-installer": "~1.0.0",
-        "annotatecms/diagnostics": "~1.0.0",
-        "annotatecms/events": "~1.0.0",
-        "latte/latte": "~2.2.0",
-        "nette/bootstrap": "~2.2.0",
-        "nette/http": "~2.2.0",
-        "nette/security": "~2.2.0",
-        "nette/application": "~2.2.0",
-        "nette/safe-stream": "~2.2.0",
-        "nette/mail": "~2.2.0"
-    },
-    "require-dev": {
-        "nette/tester": "@dev",
-        "janmarek/mockista": "@dev"
-    },
-    "autoload": {
-        "psr-4": {
-            "AnnotateCms\\Packages\\": "src/"
-        }
-    },
-    "extra": {
-        "extension-name": "packages",
-        "extension-class": "AnnotateCms\\Packages\\DI\\PackagesExtension"
+  "name": "annotate/packages",
+  "type": "annotate-extension",
+  "description": "Package management extension for Annotate Framework",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Michal Vyšinský",
+      "email": "vysinsky@live.com"
     }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "annotate/extensions-installer": "~1.0.0",
+    "annotate/diagnostics": "~1.0.0",
+    "annotate/events": "~1.0.0",
+    "latte/latte": "~2.2.0",
+    "nette/bootstrap": "~2.2.0",
+    "nette/http": "~2.2.0",
+    "nette/security": "~2.2.0",
+    "nette/application": "~2.2.0",
+    "nette/safe-stream": "~2.2.0",
+    "nette/mail": "~2.2.0"
+  },
+  "require-dev": {
+    "nette/tester": "@dev",
+    "janmarek/mockista": "@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "Annotate\\Packages\\": "src/"
+    }
+  },
+  "extra": {
+    "extension-name": "packages",
+    "extension-class": "Annotate\\Packages\\DI\\PackagesExtension"
+  }
 }

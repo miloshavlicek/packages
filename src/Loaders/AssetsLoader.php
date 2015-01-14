@@ -1,10 +1,10 @@
 <?php
 
-namespace AnnotateCms\Packages\Loaders;
+namespace Annotate\Packages\Loaders;
 
 
-use AnnotateCms\Packages\Package;
-use AnnotateCms\Packages\PlainAsset;
+use Annotate\Packages\Package;
+use Annotate\Packages\PlainAsset;
 use Kdyby\Events\Subscriber;
 use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Object;
@@ -23,10 +23,12 @@ class AssetsLoader extends Object implements Subscriber
 	private $packages = [];
 
 
+
 	public function getPackages()
 	{
 		return $this->packages;
 	}
+
 
 
 	public function addPackage(Package $package)
@@ -35,10 +37,12 @@ class AssetsLoader extends Object implements Subscriber
 	}
 
 
+
 	public function getStyles()
 	{
 		return $this->styles;
 	}
+
 
 
 	public function getScripts()
@@ -47,12 +51,14 @@ class AssetsLoader extends Object implements Subscriber
 	}
 
 
+
 	public function getSubscribedEvents()
 	{
 		return [
-			'AnnotateCms\\Templating\\TemplateFactory::onSetupTemplate',
+			'Annotate\\Templating\\TemplateFactory::onSetupTemplate',
 		];
 	}
+
 
 
 	public function addStyles($styles)
@@ -61,10 +67,12 @@ class AssetsLoader extends Object implements Subscriber
 	}
 
 
+
 	public function addScripts($scripts)
 	{
 		$this->scripts = array_merge($this->scripts, $scripts);
 	}
+
 
 
 	public function addAsset($asset)
@@ -81,6 +89,7 @@ class AssetsLoader extends Object implements Subscriber
 				break;
 		}
 	}
+
 
 
 	public function onSetupTemplate(Template $template)

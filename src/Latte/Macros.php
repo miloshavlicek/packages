@@ -1,10 +1,10 @@
 <?php
 
 
-namespace AnnotateCms\Packages\Latte;
+namespace Annotate\Packages\Latte;
 
 
-use AnnotateCms\Packages\Loaders\AssetsLoader;
+use Annotate\Packages\Loaders\AssetsLoader;
 use Latte;
 use Latte\MacroNode;
 use Latte\Macros\MacroSet;

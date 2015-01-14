@@ -1,14 +1,14 @@
 <?php
 
-namespace AnnotateCms\Packages\Loaders;
+namespace Annotate\Packages\Loaders;
 
-use AnnotateCms\Diagnostics\CmsPanel;
-use AnnotateCms\Packages\Asset;
-use AnnotateCms\Packages\Exceptions\BadPackageVersionException;
-use AnnotateCms\Packages\Exceptions\PackageNotFoundException;
-use AnnotateCms\Packages\Exceptions\PackageVariantNotFoundException;
-use AnnotateCms\Packages\Package;
-use AnnotateCms\Themes\Theme;
+use Annotate\Diagnostics\CmsPanel;
+use Annotate\Packages\Asset;
+use Annotate\Packages\Exceptions\BadPackageVersionException;
+use Annotate\Packages\Exceptions\PackageNotFoundException;
+use Annotate\Packages\Exceptions\PackageVariantNotFoundException;
+use Annotate\Packages\Package;
+use Annotate\Themes\Theme;
 use Kdyby\Events\Subscriber;
 use Nette\DI\Config\Adapters\NeonAdapter;
 use Nette\Utils\Finder;
@@ -39,6 +39,7 @@ class PackageLoader implements Subscriber
 	private $loading = [];
 
 
+
 	public function __construct($directories, $rootDir, AssetsLoader $assetsLoader)
 	{
 		foreach ($directories as $key => $directory) {
@@ -52,6 +53,7 @@ class PackageLoader implements Subscriber
 	}
 
 
+
 	public function load()
 	{
 		if (!$this->directories) {
@@ -62,6 +64,7 @@ class PackageLoader implements Subscriber
 		$this->processJson();
 		$this->addDebugSection();
 	}
+
 
 
 	private function processNeon()
@@ -84,6 +87,7 @@ class PackageLoader implements Subscriber
 			);
 		}
 	}
+
 
 
 	private function mergeVariants(&$neon)
@@ -124,6 +128,7 @@ class PackageLoader implements Subscriber
 	}
 
 
+
 	private function processJson()
 	{
 		$dotBower = [];
@@ -144,6 +149,7 @@ class PackageLoader implements Subscriber
 			$this->processBowerFile($path);
 		}
 	}
+
 
 
 	private function processBowerFile($path)
@@ -192,6 +198,7 @@ class PackageLoader implements Subscriber
 	}
 
 
+
 	private function addDebugSection()
 	{
 		$self = $this;
@@ -213,6 +220,7 @@ class PackageLoader implements Subscriber
 	}
 
 
+
 	public function addDirectory($directory)
 	{
 		$this->directories[] = $directory;
@@ -220,12 +228,14 @@ class PackageLoader implements Subscriber
 	}
 
 
+
 	public function getSubscribedEvents()
 	{
 		return [
-			'AnnotateCms\\Themes\\Loaders\\ThemesLoader::onActivateTheme'
+			'Annotate\\Themes\\Loaders\\ThemesLoader::onActivateTheme'
 		];
 	}
+
 
 
 	public function onActivateTheme(Theme $theme)
@@ -261,6 +271,7 @@ class PackageLoader implements Subscriber
 		}
 		$theme->setChecked();
 	}
+
 
 
 	public function loadPackage($name, $version = NULL, $packageVariant = 'default')
@@ -309,6 +320,7 @@ class PackageLoader implements Subscriber
 	}
 
 
+
 	/**
 	 * @param  string
 	 * @param  string
@@ -350,6 +362,7 @@ class PackageLoader implements Subscriber
 	}
 
 
+
 	/**
 	 * @param          string
 	 * @param  Package $package
@@ -377,6 +390,7 @@ class PackageLoader implements Subscriber
 			$this->assetsLoader->addStyles($styles);
 		}
 	}
+
 
 
 	/**

@@ -1,6 +1,6 @@
 <?php
 
-namespace AnnotateCms\Packages;
+namespace Annotate\Packages;
 
 
 class PlainAsset implements IAsset
@@ -10,10 +10,12 @@ class PlainAsset implements IAsset
 	private $fileName;
 
 
+
 	public function __construct($fileName)
 	{
 		$this->fileName = $fileName;
 	}
+
 
 
 	public function getRelativePath($basePath)

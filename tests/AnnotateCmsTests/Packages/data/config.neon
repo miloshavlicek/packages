@@ -1,5 +1,5 @@
 extensions:
-    packages: AnnotateCms\Packages\DI\PackagesExtension
+    packages: Annotate\Packages\DI\PackagesExtension
 
 packages:
     directories:

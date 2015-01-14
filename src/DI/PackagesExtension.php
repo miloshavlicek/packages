@@ -1,11 +1,11 @@
 <?php
 
-namespace AnnotateCms\Packages\DI;
+namespace Annotate\Packages\DI;
 
 
-use AnnotateCms\Packages\Latte\Macros;
-use AnnotateCms\Packages\Loaders\AssetsLoader;
-use AnnotateCms\Packages\Loaders\PackageLoader;
+use Annotate\Packages\Latte\Macros;
+use Annotate\Packages\Loaders\AssetsLoader;
+use Annotate\Packages\Loaders\PackageLoader;
 use Kdyby\Events\DI\EventsExtension;
 use Nette\DI\CompilerExtension;
 
@@ -19,6 +19,7 @@ class PackagesExtension extends CompilerExtension
 		],
 		'rootDir' => '%appDir%/../www'
 	];
+
 
 
 	public function loadConfiguration()
@@ -40,6 +41,7 @@ class PackagesExtension extends CompilerExtension
 		$latteFactory = $this->getLatteFactory();
 		$latteFactory->addSetup('?->onCompile[] = function($engine) { ' . Macros::CLASSNAME . '::install($engine->getCompiler()); }', ['@self']);
 	}
+
 
 
 	/**
