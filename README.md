@@ -18,7 +18,7 @@ Installation
 Run:
 
 ```sh
-$ composer require annotate/packages:~1.0
+$ composer require annotate/packages:~2.0
 ```
 
 Documentation
