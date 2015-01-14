@@ -353,8 +353,8 @@ class PackageLoader implements Subscriber
 			$versionNumber = $matches[2];
 			$versionOperator = $matches[1];
 
-			if (version_compare($package->getVersion(), $versionNumber, $versionOperator ?: '=') === FALSE) {
-				throw new BadPackageVersionException('Package "$name" is version "' . $package->getVersion() . '", but version "' . $version . '" required.');
+			if (version_compare($package->getVersion(), $versionNumber, $versionOperator ?: '>=') === FALSE) {
+				throw new BadPackageVersionException('Package "' . $name . '" is version "' . $package->getVersion() . '", but version "' . $version . '" required.');
 			}
 		}
 
