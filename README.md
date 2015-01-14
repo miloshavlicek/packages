@@ -1,9 +1,13 @@
+[![Travis](https://img.shields.io/travis/AnnotateFramework/packages.svg?style=flat-square)](https://travis-ci.org/AnnotateFramework/packages)
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/AnnotateFramework/packages.svg?style=flat-square)](https://scrutinizer-ci.com/g/AnnotateFramework/packages/)
+
+[![Packagist](https://img.shields.io/packagist/v/annotate/packages.svg?style=flat-square)](https://packagist.org/packages/annotate/packages)
+[![Packagist](https://img.shields.io/packagist/dm/annotate/packages.svg?style=flat-square)](https://packagist.org/packages/annotate/packages)
+[![Packagist](https://img.shields.io/packagist/dd/annotate/packages.svg?style=flat-square)](https://packagist.org/packages/annotate/packages)
+[![Packagist](https://img.shields.io/packagist/dt/annotate/packages.svg?style=flat-square)](https://packagist.org/packages/annotate/packages)
+
 Annotate/Packages
 ================================
-
-[![Build Status](https://travis-ci.org/AnnotateFramework/packages.svg?branch=master)](https://travis-ci.org/AnnotateFramework/packages)
-[![Downloads this Month](https://img.shields.io/packagist/dm/AnnotateFramework/packages.svg)](https://packagist.org/packages/AnnotateFramework/packages)
-[![Latest stable](https://img.shields.io/packagist/v/AnnotateFramework/packages.svg)](https://packagist.org/packages/AnnotateFramework/packages)
 
 Requirements
 ------------
