@@ -50,7 +50,7 @@ final class JsonParser implements IParser
 
 		return new Package(
 						$data['name'],
-						$data['version'],
+						isset($data['version']) ? $data['version'] : NULL,
 						[
 							'default' =>
 								[
