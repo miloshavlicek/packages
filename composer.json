@@ -14,6 +14,7 @@
     "annotate/extensions-installer": "~2.0.0",
     "annotate/diagnostics": "~2.0.0",
     "annotate/events": "~1.0.0",
+    "annotate/framework": "~2.0.0",
     "latte/latte": "~2.2.0",
     "nette/bootstrap": "~2.2.0",
     "nette/http": "~2.2.0",
