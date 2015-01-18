@@ -5,6 +5,14 @@ namespace Annotate\Packages;
 interface IAsset
 {
 
-	public function getRelativePath($basePath);
+	function getAbsolutePath();
+
+
+
+	function getRelativePath($basePath);
+
+
+
+	function getVersion();
 
 }

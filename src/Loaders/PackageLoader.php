@@ -8,11 +8,12 @@ use Annotate\Packages\Exceptions\BadPackageVersionException;
 use Annotate\Packages\Exceptions\PackageNotFoundException;
 use Annotate\Packages\Exceptions\PackageVariantNotFoundException;
 use Annotate\Packages\Package;
+use Annotate\Packages\Parsers\JsonParser;
+use Annotate\Packages\Parsers\NeonParser;
 use Annotate\Themes\Theme;
 use Kdyby\Events\Subscriber;
 use Nette\DI\Config\Adapters\NeonAdapter;
 use Nette\Utils\Finder;
-use Nette\Utils\Json;
 use Nette\Utils\Strings;
 use Tracy\Dumper;
 
@@ -69,61 +70,10 @@ class PackageLoader implements Subscriber
 
 	private function processNeon()
 	{
-		$adapter = new NeonAdapter;
+		$neonParser = new NeonParser(new NeonAdapter(), $this->rootDir);
 		foreach (Finder::findFiles('*.package.neon')->from($this->directories) as $path => $file) {
-			/** @var $file \SplFileInfo */
-			$neon = $adapter->load($path);
-			$this->mergeVariants($neon);
-			$aDir = dirname($path);
-			$rDir = str_replace($this->rootDir, NULL, $aDir);
-			$dependencies = isset($neon['dependencies']) ? $neon['dependencies'] : NULL;
-			$this->packages[strtolower($neon['name'])] = new Package(
-				$neon['name'],
-				$neon['version'],
-				$neon['variants'],
-				$dependencies,
-				$aDir,
-				$rDir
-			);
-		}
-	}
-
-
-
-	private function mergeVariants(&$neon)
-	{
-		foreach ($neon['variants'] as $name => $variant) {
-			if (isset($variant['_extends'])) {
-				$extendsName = $variant['_extends'];
-				if (!isset($neon['variants'][$extendsName])) {
-					throw new \RuntimeException('Cannot extend package variant "' . $name . '". Undefined package variant "' . $extendsName . '"');
-				}
-				$extends = $neon['variants'][$extendsName];
-				if (!isset($variant['styles'])) {
-					$variant['styles'] = [];
-				}
-				if (!isset($variant['scripts'])) {
-					$variant['scripts'] = [];
-				}
-				if (!isset($extends['styles'])) {
-					$extends['styles'] = [];
-				}
-				if (!isset($extends['scripts'])) {
-					$extends['scripts'] = [];
-				}
-
-				foreach ($extends['styles'] as $extendsStyle) {
-					array_unshift($variant['styles'], $extendsStyle);
-				}
-
-				foreach ($extends['scripts'] as $extendsScript) {
-					array_unshift($variant['scripts'], $extendsScript);
-				}
-
-				$neon['variants'][$name]['styles'] = $variant['styles'];
-				$neon['variants'][$name]['scripts'] = $variant['scripts'];
-				unset($variant['_extends']);
-			}
+			$package = $neonParser->parse($path);
+			$this->packages[strtolower($package->getName())] = $package;
 		}
 	}
 
@@ -154,46 +104,11 @@ class PackageLoader implements Subscriber
 
 	private function processBowerFile($path)
 	{
-		$data = Json::decode(file_get_contents($path), Json::FORCE_ARRAY);
+		$jsonParser = new JsonParser($this->rootDir);
+		$package = $jsonParser->parse($path);
 
-		$aDir = dirname($path);
-		$rDir = str_replace($this->rootDir, NULL, $aDir);
-		$dependencies = isset($data['dependencies']) ? $data['dependencies'] : NULL;
-
-		if (isset($data['main'])) {
-			$files = is_array($data['main']) ? $data['main'] : [$data['main']];
-		} else {
-			$files = [];
-		}
-
-		$scripts = [];
-		$styles = [];
-
-		foreach ($files as $filename) {
-			$ext = pathinfo($filename, PATHINFO_EXTENSION);
-			if ($ext === 'css') {
-				$styles[] = '@' . ltrim($filename, '.');
-			}
-			if ($ext === 'js') {
-				$scripts[] = '@' . ltrim($filename, '.');
-			}
-		};
-
-		if (!isset($this->packages[strtolower($data['name'])])) {
-			$this->packages[strtolower($data['name'])] = new Package(
-				$data['name'],
-				$data['version'],
-				[
-					'default' =>
-						[
-							'styles' => $styles,
-							'scripts' => $scripts,
-						],
-				],
-				$dependencies,
-				$aDir,
-				$rDir
-			);
+		if (!isset($this->packages[strtolower($package->getName())])) {
+			$this->packages[strtolower($package->getName())] = $package;
 		}
 	}
 

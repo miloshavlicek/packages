@@ -6,7 +6,7 @@ namespace Annotate\Packages;
 use Annotate\Framework\Utils\Strings;
 
 
-class Asset implements IAsset
+final class Asset implements IAsset
 {
 
 	/** @var Package */

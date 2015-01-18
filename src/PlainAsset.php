@@ -3,7 +3,7 @@
 namespace Annotate\Packages;
 
 
-class PlainAsset implements IAsset
+final class PlainAsset implements IAsset
 {
 
 	/** @var string */
@@ -21,6 +21,20 @@ class PlainAsset implements IAsset
 	public function getRelativePath($basePath)
 	{
 		return $this->fileName;
+	}
+
+
+
+	public function getAbsolutePath()
+	{
+		return $_SERVER['DOCUMENT_ROOT'] . $this->fileName;
+	}
+
+
+
+	public function getVersion()
+	{
+		return 0;
 	}
 
 }
